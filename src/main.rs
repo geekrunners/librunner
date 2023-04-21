@@ -1,9 +1,26 @@
 use chrono::Duration;
 
 pub trait Race {
+    const LAP_DISTANCE: i32;
+
     fn new(distance: i32, duration: Duration) -> Self;
-    fn pace(&self) -> Duration;
-    fn laps(&self) -> Vec<Duration>;
+    fn distance(&self) -> i32;
+    fn duration(&self) -> Duration;
+    
+    fn pace(&self) -> Duration {
+        return Duration::seconds((Self::LAP_DISTANCE as f32 * (self.duration().num_seconds() as f32 / self.distance() as f32)) as i64);
+    }
+
+    fn laps(&self) -> Vec<Duration> {
+        let num_laps = self.distance() / Self::LAP_DISTANCE + if (self.distance() % Self::LAP_DISTANCE) > 0 { 1 } else { 0 };
+        let mut laps = Vec::new();
+
+        for _n in 0..num_laps {
+            laps.push(self.pace());
+        }
+
+        return laps;
+    }
 }
 
 struct ImperialRace {
@@ -12,6 +29,8 @@ struct ImperialRace {
 }
 
 impl Race for ImperialRace {
+    const LAP_DISTANCE: i32 = 1760;
+
     fn new(distance: i32, duration: Duration) -> ImperialRace {
         ImperialRace {
             distance: distance,
@@ -19,19 +38,12 @@ impl Race for ImperialRace {
         }
     }
 
-    fn pace(&self) -> Duration {
-        return Duration::seconds((1760.0 * (self.duration.num_seconds() as f32 / self.distance as f32)) as i64);
+    fn distance(&self) -> i32 {
+        self.distance
     }
 
-    fn laps(&self) -> Vec<Duration> {
-        let num_laps = self.distance / 1760 + if (self.distance % 1760) > 0 { 1 } else { 0 };
-        let mut laps = Vec::new();
-
-        for _n in 0..num_laps {
-            laps.push(self.pace());
-        }
-
-        return laps;
+    fn duration(&self) -> Duration {
+        self.duration
     }
 }
 
@@ -41,6 +53,8 @@ struct MetricRace {
 }
 
 impl Race for MetricRace {
+    const LAP_DISTANCE: i32 = 1000;
+
     fn new(distance: i32, duration: Duration) -> MetricRace {
         MetricRace {
             distance: distance,
@@ -48,19 +62,12 @@ impl Race for MetricRace {
         }
     }
 
-    fn pace(&self) -> Duration {
-        return Duration::seconds((1000.0 * (self.duration.num_seconds() as f32 / self.distance as f32)) as i64);
+    fn distance(&self) -> i32 {
+        self.distance
     }
 
-    fn laps(&self) -> Vec<Duration> {
-        let num_laps = self.distance / 1000 + if (self.distance % 1000) > 0 { 1 } else { 0 };
-        let mut laps = Vec::new();
-
-        for _n in 0..num_laps {
-            laps.push(self.pace());
-        }
-
-        return laps;
+    fn duration(&self) -> Duration {
+        self.duration
     }
 }
 
@@ -69,13 +76,13 @@ fn main() {
 
     let m_race: MetricRace = Race::new(42195, duration);
 
-    println!("\nDistance: {}m, Duration: {:?}, Pace: {:?}", m_race.distance, duration.num_seconds(), m_race.pace().num_seconds());
+    println!("\nDistance: {}m, Duration: {:?}", m_race.distance, duration.num_seconds());
     println!("Pace (Km): {}:{}", m_race.pace().num_seconds() / 60, m_race.pace().num_seconds() % 60);
     println!("Laps: {:?}", m_race.laps().len());
 
     let i_race: ImperialRace = Race::new(46112, duration);
 
-    println!("\nDistance: {}m, Duration: {:?}, Pace: {:?}", i_race.distance, duration.num_seconds(), i_race.pace().num_seconds());
+    println!("\nDistance: {}m, Duration: {:?}", i_race.distance, duration.num_seconds());
     println!("Pace (Mile): {}:{}", i_race.pace().num_seconds() / 60, i_race.pace().num_seconds() % 60);
     println!("Laps: {:?}", i_race.laps().len());
 }
