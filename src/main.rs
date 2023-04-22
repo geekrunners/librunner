@@ -7,7 +7,7 @@ pub trait Race {
     fn distance(&self) -> i32;
     fn duration(&self) -> Duration;
     
-    fn pace(&self) -> Duration {
+    fn average_pace(&self) -> Duration {
         return Duration::seconds((Self::LAP_DISTANCE as f32 * (self.duration().num_seconds() as f32 / self.distance() as f32)) as i64);
     }
 
@@ -16,7 +16,7 @@ pub trait Race {
         let mut laps = Vec::new();
 
         for _n in 0..num_laps {
-            laps.push(self.pace());
+            laps.push(self.average_pace());
         }
 
         return laps;
@@ -77,12 +77,12 @@ fn main() {
     let m_race: MetricRace = Race::new(42195, duration);
 
     println!("\nDistance: {}m, Duration: {:?}", m_race.distance, duration.num_seconds());
-    println!("Pace (Km): {}:{}", m_race.pace().num_seconds() / 60, m_race.pace().num_seconds() % 60);
+    println!("Pace (Km): {}:{}", m_race.average_pace().num_seconds() / 60, m_race.average_pace().num_seconds() % 60);
     println!("Laps: {:?}", m_race.laps().len());
 
     let i_race: ImperialRace = Race::new(46112, duration);
 
     println!("\nDistance: {}m, Duration: {:?}", i_race.distance, duration.num_seconds());
-    println!("Pace (Mile): {}:{}", i_race.pace().num_seconds() / 60, i_race.pace().num_seconds() % 60);
+    println!("Pace (Mile): {}:{}", i_race.average_pace().num_seconds() / 60, i_race.average_pace().num_seconds() % 60);
     println!("Laps: {:?}", i_race.laps().len());
 }
