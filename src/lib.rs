@@ -74,3 +74,44 @@ impl Race for MetricRace {
         self.duration
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use chrono::Duration;
+
+    use crate::Race;
+    use crate::ImperialRace;
+    use crate::MetricRace;
+
+    #[test]
+    fn test_metric_average_pace() {
+        let duration = Duration::seconds(14400);
+        let m_race: MetricRace = Race::new(42195, duration);
+        assert_eq!(m_race.average_pace().num_seconds(), 341);
+        assert_eq!(m_race.average_pace().num_seconds() / 60, 5);
+        assert_eq!(m_race.average_pace().num_seconds() % 60, 41);
+    }
+
+    #[test]
+    fn test_metric_splits() {
+        let duration = Duration::seconds(14400);
+        let m_race: MetricRace = Race::new(42195, duration);
+        assert_eq!(m_race.splits().len(), 43);
+    }
+
+    #[test]
+    fn test_imperial_average_pace() {
+        let duration = Duration::seconds(14400);
+        let i_race: ImperialRace = Race::new(46112, duration);
+        assert_eq!(i_race.average_pace().num_seconds(), 549);
+        assert_eq!(i_race.average_pace().num_seconds() / 60, 9);
+        assert_eq!(i_race.average_pace().num_seconds() % 60, 9);
+    }
+
+    #[test]
+    fn test_imperial_splits() {
+        let duration = Duration::seconds(14400);
+        let i_race: ImperialRace = Race::new(46112, duration);
+        assert_eq!(i_race.splits().len(), 27);
+    }
+}
