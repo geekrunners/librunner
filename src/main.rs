@@ -8,11 +8,11 @@ fn main() {
 
     println!("\nDistance: {}m, Duration: {:?}", m_race.distance, duration.num_seconds());
     println!("Pace (Km): {}:{}", m_race.average_pace().num_seconds() / 60, m_race.average_pace().num_seconds() % 60);
-    println!("Laps: {:?}", m_race.laps().len());
+    println!("Splits: {:?}", m_race.splits().len());
 
     let i_race: geekrunners::ImperialRace = Race::new(46112, duration);
 
     println!("\nDistance: {}m, Duration: {:?}", i_race.distance, duration.num_seconds());
     println!("Pace (Mile): {}:{}", i_race.average_pace().num_seconds() / 60, i_race.average_pace().num_seconds() % 60);
-    println!("Laps: {:?}", i_race.laps().len());
+    println!("splits: {:?}", i_race.splits().len());
 }
