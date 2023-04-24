@@ -1,4 +1,4 @@
-use chrono::Duration;
+use std::time::Duration;
 
 pub trait Race {
     const LAP_DISTANCE: i32;
@@ -8,7 +8,7 @@ pub trait Race {
     fn duration(&self) -> Duration;
     
     fn average_pace(&self) -> Duration {
-        return Duration::seconds((Self::LAP_DISTANCE as f32 * (self.duration().num_seconds() as f32 / self.distance() as f32)) as i64);
+        return Duration::new((Self::LAP_DISTANCE as f32 * (self.duration().as_secs() as f32 / self.distance() as f32)) as u64, 0);
     }
 
     fn splits(&self) -> Vec<Duration> {
@@ -20,10 +20,6 @@ pub trait Race {
         }
 
         return splits;
-    }
-
-    fn splits_with_elevation(&self) -> Vec<Duration> {
-        self.splits()
     }
 }
 
@@ -77,7 +73,7 @@ impl Race for MetricRace {
 
 #[cfg(test)]
 mod tests {
-    use chrono::Duration;
+    use std::time::Duration;
 
     use crate::Race;
     use crate::ImperialRace;
@@ -85,32 +81,32 @@ mod tests {
 
     #[test]
     fn test_metric_average_pace() {
-        let duration = Duration::seconds(14400);
+        let duration = Duration::new(14400, 0);
         let m_race: MetricRace = Race::new(42195, duration);
-        assert_eq!(m_race.average_pace().num_seconds(), 341);
-        assert_eq!(m_race.average_pace().num_seconds() / 60, 5);
-        assert_eq!(m_race.average_pace().num_seconds() % 60, 41);
+        assert_eq!(m_race.average_pace().as_secs(), 341);
+        assert_eq!(m_race.average_pace().as_secs() / 60, 5);
+        assert_eq!(m_race.average_pace().as_secs() % 60, 41);
     }
 
     #[test]
     fn test_metric_splits() {
-        let duration = Duration::seconds(14400);
+        let duration = Duration::new(14400, 0);
         let m_race: MetricRace = Race::new(42195, duration);
         assert_eq!(m_race.splits().len(), 43);
     }
 
     #[test]
     fn test_imperial_average_pace() {
-        let duration = Duration::seconds(14400);
+        let duration = Duration::new(14400, 0);
         let i_race: ImperialRace = Race::new(46112, duration);
-        assert_eq!(i_race.average_pace().num_seconds(), 549);
-        assert_eq!(i_race.average_pace().num_seconds() / 60, 9);
-        assert_eq!(i_race.average_pace().num_seconds() % 60, 9);
+        assert_eq!(i_race.average_pace().as_secs(), 549);
+        assert_eq!(i_race.average_pace().as_secs() / 60, 9);
+        assert_eq!(i_race.average_pace().as_secs() % 60, 9);
     }
 
     #[test]
     fn test_imperial_splits() {
-        let duration = Duration::seconds(14400);
+        let duration = Duration::new(14400, 0);
         let i_race: ImperialRace = Race::new(46112, duration);
         assert_eq!(i_race.splits().len(), 27);
     }
