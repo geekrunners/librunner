@@ -99,6 +99,18 @@ mod tests {
     }
 
     #[test]
+    fn test_metric_splits_duration() {
+        let duration = Duration::new(14400, 0);
+        let m_race: MetricRace = Race::new(42195, duration);
+        let splits = m_race.splits();
+        let average_pace = m_race.average_pace();
+
+        for split in splits {
+            assert_eq!(split, average_pace);
+        }
+    }
+
+    #[test]
     fn test_imperial_average_pace() {
         let duration = Duration::new(14400, 0);
         let i_race: ImperialRace = Race::new(46112, duration);
@@ -112,5 +124,17 @@ mod tests {
         let duration = Duration::new(14400, 0);
         let i_race: ImperialRace = Race::new(46112, duration);
         assert_eq!(i_race.splits().len(), 27);
+    }
+
+    #[test]
+    fn test_imperial_splits_duration() {
+        let duration = Duration::new(14400, 0);
+        let i_race: ImperialRace = Race::new(46112, duration);
+        let splits = i_race.splits();
+        let average_pace = i_race.average_pace();
+
+        for split in splits {
+            assert_eq!(split, average_pace);
+        }
     }
 }
