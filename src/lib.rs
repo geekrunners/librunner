@@ -11,11 +11,14 @@ pub trait Race {
         return Duration::new((Self::LAP_DISTANCE as f32 * (self.duration().as_secs() as f32 / self.distance() as f32)) as u64, 0);
     }
 
+    fn num_splits(&self) -> i32 {
+        self.distance() / Self::LAP_DISTANCE + if (self.distance() % Self::LAP_DISTANCE) > 0 { 1 } else { 0 }
+    }
+
     fn splits(&self) -> Vec<Duration> {
-        let num_splits = self.distance() / Self::LAP_DISTANCE + if (self.distance() % Self::LAP_DISTANCE) > 0 { 1 } else { 0 };
         let mut splits = Vec::new();
 
-        for _n in 0..num_splits {
+        for _n in 0..self.num_splits() {
             splits.push(self.average_pace());
         }
 
