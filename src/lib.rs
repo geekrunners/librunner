@@ -92,10 +92,10 @@ mod tests {
     }
 
     #[test]
-    fn test_metric_splits() {
+    fn test_metric_num_splits() {
         let duration = Duration::new(14400, 0);
         let m_race: MetricRace = Race::new(42195, duration);
-        assert_eq!(m_race.splits().len(), 43);
+        assert_eq!(m_race.num_splits(), 43);
     }
 
     #[test]
@@ -120,10 +120,10 @@ mod tests {
     }
 
     #[test]
-    fn test_imperial_splits() {
+    fn test_imperial_num_splits() {
         let duration = Duration::new(14400, 0);
         let i_race: ImperialRace = Race::new(46112, duration);
-        assert_eq!(i_race.splits().len(), 27);
+        assert_eq!(i_race.num_splits(), 27);
     }
 
     #[test]
