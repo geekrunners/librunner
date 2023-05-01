@@ -17,12 +17,41 @@ pub trait Race {
 
     fn splits(&self) -> Vec<Duration> {
         let mut splits = Vec::new();
+        let average_pace = self.average_pace();
 
         for _n in 0..self.num_splits() {
-            splits.push(self.average_pace());
+            splits.push(average_pace);
         }
 
         return splits;
+    }
+
+    fn negative_splits(&self, degree: usize) -> Vec<Duration> {
+        // minutes between minimal and maximum pace
+        let variation = (2 * degree) + 1;
+        let num_splits = self.num_splits();
+        // block of splits before decrementing the pace
+        let block = num_splits as usize / variation;
+        let average_pace = self.average_pace();
+
+        let mut negative_splits = Vec::new();
+        // the pace starts high and decrements at every splits block
+        let mut pace = Duration::new(average_pace.as_secs() + degree as u64, 0);
+        let mut block_count = 0;
+        
+        for _n in 0..num_splits as usize {
+            if block == block_count {
+                // decrements the pace at every new block.
+                let secs = pace.as_secs() - 1u64;
+                pace = Duration::new(secs, 0);
+
+                block_count = 0;
+            }
+            negative_splits.push(pace);
+            block_count += 1;
+        }
+
+        return negative_splits;
     }
 }
 
