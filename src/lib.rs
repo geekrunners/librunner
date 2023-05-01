@@ -30,7 +30,7 @@ pub trait Race {
         // minutes between minimal and maximum pace
         let variation = (2 * degree) + 1;
         let num_splits = self.num_splits();
-        // block of splits before decrementing the pace
+        // size of the block of splits with the same pace
         let block = num_splits as usize / variation;
         let average_pace = self.average_pace();
 
