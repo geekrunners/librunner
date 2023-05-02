@@ -180,7 +180,24 @@ mod tests {
         assert_eq!(negative_splits[block].as_secs(), 346 - 1);
         assert_eq!(negative_splits[block * 2].as_secs(), 346 - 2);
         assert_eq!(negative_splits[block * variation].as_secs(), 346 - variation as u64);
-        assert_eq!(negative_splits[block * degree].as_secs(), 346 - degree as u64);
+        assert_eq!(negative_splits[block * degree].as_secs(), m_race.average_pace().as_secs());
+    }
+
+    #[test]
+    fn test_metric_positive_splits() {
+        let duration = Duration::new(14400, 0);
+        let m_race: MetricRace = Race::new(42195, duration);
+        
+        let degree = 5;
+        let variation = (2 * degree) + 1;
+        let block = m_race.num_splits() as usize / variation;
+        let positive_splits = m_race.positive_splits(degree);
+
+        assert_eq!(positive_splits[0].as_secs(), 346 - (degree * 2) as u64);
+        assert_eq!(positive_splits[block].as_secs(), 346 - (degree * 2) as u64 + 1);
+        assert_eq!(positive_splits[block * 2].as_secs(), 346 - (degree * 2) as u64 + 2);
+        assert_eq!(positive_splits[block * variation].as_secs(), 346 + 1);
+        assert_eq!(positive_splits[block * degree].as_secs(), m_race.average_pace().as_secs());
     }
 
     #[test]
