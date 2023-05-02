@@ -1,3 +1,11 @@
 # Lib Runner
 
-Use this library to assist runners with calculations for health, workouts, and races.
+Rust library to assist runners on planning their workouts, races, and improve their health.
+
+## Build
+
+    $ cargo build
+
+## Test
+
+    $ cargo test    
