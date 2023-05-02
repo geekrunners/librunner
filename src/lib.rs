@@ -53,6 +53,33 @@ pub trait Race {
 
         return negative_splits;
     }
+
+    fn positive_splits(&self, degree: usize) -> Vec<Duration> {
+        let variation = (2 * degree) + 1;
+        let num_splits = self.num_splits();
+        // size of the block of splits with the same pace
+        let block = num_splits as usize / variation;
+        let average_pace = self.average_pace();
+
+        let mut positive_splits = Vec::new();
+        // the pace starts high and decrements at every splits block
+        let mut pace = Duration::new(average_pace.as_secs() - degree as u64, 0);
+        let mut block_count = 0;
+        
+        for _n in 0..num_splits as usize {
+            if block == block_count {
+                // decrements the pace at every new block.
+                let secs = pace.as_secs() + 1u64;
+                pace = Duration::new(secs, 0);
+
+                block_count = 0;
+            }
+            positive_splits.push(pace);
+            block_count += 1;
+        }
+
+        return positive_splits;
+    }
 }
 
 pub struct ImperialRace {
