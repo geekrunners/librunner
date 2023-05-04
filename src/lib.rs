@@ -1,18 +1,18 @@
 use std::time::Duration;
 
 pub trait Race {
-    const LAP_DISTANCE: i32;
+    const SPLIT_DISTANCE: i32;
 
     fn new(distance: i32, duration: Duration) -> Self;
     fn distance(&self) -> i32;
     fn duration(&self) -> Duration;
     
     fn average_pace(&self) -> Duration {
-        return Duration::new((Self::LAP_DISTANCE as f32 * (self.duration().as_secs() as f32 / self.distance() as f32)) as u64, 0);
+        return Duration::new((Self::SPLIT_DISTANCE as f32 * (self.duration().as_secs() as f32 / self.distance() as f32)) as u64, 0);
     }
 
     fn num_splits(&self) -> i32 {
-        self.distance() / Self::LAP_DISTANCE + if (self.distance() % Self::LAP_DISTANCE) > 0 { 1 } else { 0 }
+        self.distance() / Self::SPLIT_DISTANCE + if (self.distance() % Self::SPLIT_DISTANCE) > 0 { 1 } else { 0 }
     }
 
     fn splits(&self) -> Vec<Duration> {
@@ -88,7 +88,7 @@ pub struct ImperialRace {
 }
 
 impl Race for ImperialRace {
-    const LAP_DISTANCE: i32 = 1760;
+    const SPLIT_DISTANCE: i32 = 1760; // yards
 
     fn new(distance: i32, duration: Duration) -> ImperialRace {
         ImperialRace {
@@ -112,7 +112,7 @@ pub struct MetricRace {
 }
 
 impl Race for MetricRace {
-    const LAP_DISTANCE: i32 = 1000;
+    const SPLIT_DISTANCE: i32 = 1000; // meters
 
     fn new(distance: i32, duration: Duration) -> MetricRace {
         MetricRace {
