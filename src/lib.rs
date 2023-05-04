@@ -11,6 +11,10 @@ pub trait Race {
         return Duration::new((Self::SPLIT_DISTANCE as f32 * (self.duration().as_secs() as f32 / self.distance() as f32)) as u64, 0);
     }
 
+    fn speed(&self) -> f32 {
+        self.distance() as f32 / self.duration().as_secs() as f32
+    }
+
     fn num_splits(&self) -> i32 {
         self.distance() / Self::SPLIT_DISTANCE + if (self.distance() % Self::SPLIT_DISTANCE) > 0 { 1 } else { 0 }
     }
@@ -145,6 +149,13 @@ mod tests {
         assert_eq!(m_race.average_pace().as_secs(), 341);
         assert_eq!(m_race.average_pace().as_secs() / 60, 5);
         assert_eq!(m_race.average_pace().as_secs() % 60, 41);
+    }
+
+    #[test]
+    fn test_metric_speed() {
+        let duration = Duration::new(14400, 0);
+        let m_race: MetricRace = Race::new(42195, duration);
+        assert_eq!(m_race.speed(), 2.9302084);
     }
 
     #[test]
