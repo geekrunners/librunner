@@ -4,14 +4,11 @@ Rust library to assist runners on planning their workouts, races, and improve th
 
 ## Usage
 
-Add Lib Runner as a dependency to your `cargo.toml`:
+Run the following Cargo command in your project folder:
 
-```toml
-[dependencies]
-librunner = "0.1.0"
-```
+    $ cargo add librunner
 
-Call it from the source code:
+Call it in the source code:
 
 ```rust
 use std::time::Duration;
@@ -40,13 +37,3 @@ fn main() {
              (i_race.speed() * 3.6));
 }
 ```
-
-## Contribute
-
-### Build
-
-    $ cargo build
-
-### Test
-
-    $ cargo test
