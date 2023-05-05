@@ -1,24 +1,35 @@
 use std::time::Duration;
 
+/// A running race, already with common calculations that work with multiple scales.
 pub trait Race {
+    /// The distance of one split in an implemented scale.
     const SPLIT_DISTANCE: i32;
 
+    /// Creates a new instance of the race with the supported attributes.
     fn new(distance: i32, duration: Duration) -> Self;
+
+    /// Returns the distance of the race.
     fn distance(&self) -> i32;
+
+    /// Returns the duration of the race.
     fn duration(&self) -> Duration;
     
+    /// Calculates the average pace based on distance and duration.
     fn average_pace(&self) -> Duration {
         return Duration::new((Self::SPLIT_DISTANCE as f32 * (self.duration().as_secs() as f32 / self.distance() as f32)) as u64, 0);
     }
 
+    /// Calculates the speed of the runner to complete the distance within a duration.
     fn speed(&self) -> f32 {
         self.distance() as f32 / self.duration().as_secs() as f32
     }
 
+    /// Calculates the number of splits based on the race distance and the split distance.
     fn num_splits(&self) -> i32 {
         self.distance() / Self::SPLIT_DISTANCE + if (self.distance() % Self::SPLIT_DISTANCE) > 0 { 1 } else { 0 }
     }
 
+    /// Returns the splits of the race, a vector of average paces.
     fn splits(&self) -> Vec<Duration> {
         let mut splits = Vec::new();
         let average_pace = self.average_pace();
@@ -30,6 +41,11 @@ pub trait Race {
         return splits;
     }
 
+    /// Returns the splits of the race from a higher to a lower pace, according to the degree of variation.
+    /// 
+    /// # Arguments
+    /// 
+    /// * `degree` - the degree of variation from the average pace in seconds.
     fn negative_splits(&self, degree: usize) -> Vec<Duration> {
         // minutes between minimal and maximum pace
         let variation = (2 * degree) + 1;
@@ -58,6 +74,11 @@ pub trait Race {
         return negative_splits;
     }
 
+    /// Returns the splits of the race from a lower to a higher pace, according to the degree of variation.
+    /// 
+    /// # Arguments
+    /// 
+    /// * `degree` - the degree of variation from the average pace in seconds.
     fn positive_splits(&self, degree: usize) -> Vec<Duration> {
         let variation = (2 * degree) + 1;
         let num_splits = self.num_splits();
@@ -86,6 +107,7 @@ pub trait Race {
     }
 }
 
+/// A running race using the imperial scale, such as miles and yards.
 pub struct ImperialRace {
     pub distance: i32,
     pub duration: Duration
@@ -110,6 +132,7 @@ impl Race for ImperialRace {
     }
 }
 
+/// A running race using the metric scale, such as kilometers and metters.
 pub struct MetricRace {
     pub distance: i32,
     pub duration: Duration
