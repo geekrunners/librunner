@@ -3,13 +3,13 @@ use std::time::Duration;
 /// A running race, already with common calculations that work with multiple scales.
 pub trait Race {
     /// The distance of one split in an implemented scale.
-    const SPLIT_DISTANCE: i32;
+    const SPLIT_DISTANCE: u64;
 
     /// Creates a new instance of the race with the supported attributes.
-    fn new(distance: i32, duration: Duration) -> Self;
+    fn new(distance: u64, duration: Duration) -> Self;
 
     /// Returns the distance of the race.
-    fn distance(&self) -> i32;
+    fn distance(&self) -> u64;
 
     /// Returns the duration of the race.
     fn duration(&self) -> Duration;
@@ -25,7 +25,7 @@ pub trait Race {
     }
 
     /// Calculates the number of splits based on the race distance and the split distance.
-    fn num_splits(&self) -> i32 {
+    fn num_splits(&self) -> u64 {
         self.distance() / Self::SPLIT_DISTANCE + if (self.distance() % Self::SPLIT_DISTANCE) > 0 { 1 } else { 0 }
     }
 
@@ -46,17 +46,17 @@ pub trait Race {
     /// # Arguments
     /// 
     /// * `degree` - the degree of variation from the average pace in seconds.
-    fn negative_splits(&self, degree: usize) -> Vec<Duration> {
+    fn negative_splits(&self, degree: Duration) -> Vec<Duration> {
         // minutes between minimal and maximum pace
-        let variation = (2 * degree) + 1;
+        let variation = (2 * degree.as_secs()) + 1;
         let num_splits = self.num_splits();
         // size of the block of splits with the same pace
-        let block = num_splits as usize / variation;
+        let block = num_splits / variation;
         let average_pace = self.average_pace();
 
         let mut negative_splits = Vec::new();
         // the pace starts high and decrements at every splits block
-        let mut pace = Duration::new(average_pace.as_secs() + degree as u64, 0);
+        let mut pace = Duration::new(average_pace.as_secs() + degree.as_secs(), 0);
         let mut block_count = 0;
         
         for _n in 0..num_splits as usize {
@@ -79,16 +79,16 @@ pub trait Race {
     /// # Arguments
     /// 
     /// * `degree` - the degree of variation from the average pace in seconds.
-    fn positive_splits(&self, degree: usize) -> Vec<Duration> {
-        let variation = (2 * degree) + 1;
+    fn positive_splits(&self, degree: Duration) -> Vec<Duration> {
+        let variation = (2 * degree.as_secs()) + 1;
         let num_splits = self.num_splits();
         // size of the block of splits with the same pace
-        let block = num_splits as usize / variation;
+        let block = num_splits / variation;
         let average_pace = self.average_pace();
 
         let mut positive_splits = Vec::new();
         // the pace starts high and decrements at every splits block
-        let mut pace = Duration::new(average_pace.as_secs() - degree as u64, 0);
+        let mut pace = Duration::new(average_pace.as_secs() - degree.as_secs(), 0);
         let mut block_count = 0;
         
         for _n in 0..num_splits as usize {
@@ -109,21 +109,21 @@ pub trait Race {
 
 /// A running race using the imperial scale, such as miles and yards.
 pub struct ImperialRace {
-    pub distance: i32,
+    pub distance: u64,
     pub duration: Duration
 }
 
 impl Race for ImperialRace {
-    const SPLIT_DISTANCE: i32 = 1760; // yards
+    const SPLIT_DISTANCE: u64 = 1760; // yards
 
-    fn new(distance: i32, duration: Duration) -> ImperialRace {
+    fn new(distance: u64, duration: Duration) -> ImperialRace {
         ImperialRace {
             distance,
             duration
         }
     }
 
-    fn distance(&self) -> i32 {
+    fn distance(&self) -> u64 {
         self.distance
     }
 
@@ -134,21 +134,21 @@ impl Race for ImperialRace {
 
 /// A running race using the metric scale, such as kilometers and metters.
 pub struct MetricRace {
-    pub distance: i32,
+    pub distance: u64,
     pub duration: Duration
 }
 
 impl Race for MetricRace {
-    const SPLIT_DISTANCE: i32 = 1000; // meters
+    const SPLIT_DISTANCE: u64 = 1000; // meters
 
-    fn new(distance: i32, duration: Duration) -> MetricRace {
+    fn new(distance: u64, duration: Duration) -> MetricRace {
         MetricRace {
             distance,
             duration
         }
     }
 
-    fn distance(&self) -> i32 {
+    fn distance(&self) -> u64 {
         self.distance
     }
 
