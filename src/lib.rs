@@ -8,6 +8,8 @@ pub trait Race {
     /// Creates a new instance of the race with the supported attributes.
     fn new(distance: u64, duration: Duration) -> Self;
 
+    fn new_from_pace(distance: u64, pace: Duration) -> Self;
+
     /// Returns the distance of the race.
     fn distance(&self) -> u64;
 
@@ -123,6 +125,10 @@ impl Race for ImperialRace {
         }
     }
 
+    fn new_from_pace(_distance: u64, _pace: Duration) -> Self {
+        todo!()
+    }
+
     fn distance(&self) -> u64 {
         self.distance
     }
@@ -146,6 +152,10 @@ impl Race for MetricRace {
             distance,
             duration
         }
+    }
+
+    fn new_from_pace(_distance: u64, _pace: Duration) -> Self {
+        todo!()
     }
 
     fn distance(&self) -> u64 {
