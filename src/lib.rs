@@ -112,7 +112,7 @@ pub trait Race {
 /// A running race using the imperial scale, such as miles and yards.
 pub struct ImperialRace {
     pub distance: u64,
-    pub duration: Duration
+    pub duration: Option<Duration>
 }
 
 impl Race for ImperialRace {
@@ -121,7 +121,7 @@ impl Race for ImperialRace {
     fn new(distance: u64, duration: Duration) -> ImperialRace {
         ImperialRace {
             distance,
-            duration
+            duration: Some(duration)
         }
     }
 
@@ -134,14 +134,17 @@ impl Race for ImperialRace {
     }
 
     fn duration(&self) -> Duration {
-        self.duration
+        match self.duration {
+            Some(p) => p,
+            None => Duration::new(0, 0)
+        }
     }
 }
 
 /// A running race using the metric scale, such as kilometers and metters.
 pub struct MetricRace {
     pub distance: u64,
-    pub duration: Duration
+    pub duration: Option<Duration>
 }
 
 impl Race for MetricRace {
@@ -150,7 +153,7 @@ impl Race for MetricRace {
     fn new(distance: u64, duration: Duration) -> MetricRace {
         MetricRace {
             distance,
-            duration
+            duration: Some(duration)
         }
     }
 
@@ -163,7 +166,10 @@ impl Race for MetricRace {
     }
 
     fn duration(&self) -> Duration {
-        self.duration
+        match self.duration {
+            Some(p) => p,
+            None => Duration::new(0, 0)
+        }
     }
 }
 
