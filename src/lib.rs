@@ -26,6 +26,21 @@ pub trait Race {
     }
 
     /// Calculates the speed of the runner to complete the distance within a duration.
+    /// ```
+    /// use std::time::Duration;
+    /// use librunner::Race;
+    /// use librunner::MetricRace;
+    /// use librunner::ImperialRace;
+    /// 
+    /// // Race measured in metric units
+    /// let duration = Duration::new(14400, 0); // seconds
+    /// let m_race: MetricRace = Race::new(42195, duration); // meters
+    /// assert_eq!(m_race.speed(), 2.9302084); // m/s
+    /// 
+    /// // Race measured in imperial units
+    /// let i_race: ImperialRace = Race::new(46112, duration); // yards
+    /// assert_eq!(i_race.speed(), 3.202222); // yd/s
+    /// ```
     fn speed(&self) -> f32 {
         self.distance() as f32 / self.duration().as_secs() as f32
     }
@@ -230,13 +245,6 @@ mod tests {
         assert_eq!(m_race.average_pace().as_secs(), 341);
         assert_eq!(m_race.average_pace().as_secs() / 60, 5);
         assert_eq!(m_race.average_pace().as_secs() % 60, 41);
-    }
-
-    #[test]
-    fn test_metric_speed() {
-        let duration = Duration::new(14400, 0);
-        let m_race: MetricRace = Race::new(42195, duration);
-        assert_eq!(m_race.speed(), 2.9302084);
     }
 
     #[test]
