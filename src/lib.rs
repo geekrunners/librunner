@@ -22,7 +22,7 @@ pub trait Race {
         return Duration::new(
             (Self::SPLIT_DISTANCE as f32 * 
             (self.duration().as_secs() as f32 / self.distance() as f32)
-        ) as u64, 0);
+        ) as u64, 0)
     }
 
     /// Calculates the speed of the runner to complete the distance within a duration.
@@ -53,7 +53,7 @@ pub trait Race {
     /// Returns the splits of the race, a vector of average paces.
     fn splits(&self) -> Vec<Duration> {
         let average_pace = self.average_pace();
-        return self.splits_with_pace(average_pace);
+        self.splits_with_pace(average_pace)
     }
 
     /// Returns the splits of the race with a custom pace.
@@ -64,7 +64,7 @@ pub trait Race {
             splits.push(pace);
         }
 
-        return splits;
+        splits
     }
 
     /// Returns the splits of the race from a higher to a lower pace, according to the degree of variation.
@@ -97,7 +97,7 @@ pub trait Race {
             block_count += 1;
         }
 
-        return negative_splits;
+        negative_splits
     }
 
     /// Returns the splits of the race from a lower to a higher pace, according to the degree of variation.
@@ -129,7 +129,7 @@ pub trait Race {
             block_count += 1;
         }
 
-        return positive_splits;
+        positive_splits
     }
 }
 
@@ -160,7 +160,7 @@ impl Race for ImperialRace {
 
         i_race.duration = Some(Duration::new(duration, 0));
 
-        return i_race;
+        i_race
     }
 
     fn distance(&self) -> u64 {
@@ -202,7 +202,7 @@ impl Race for MetricRace {
 
         m_race.duration = Some(Duration::new(duration, 0));
 
-        return m_race;
+        m_race
     }
 
     fn distance(&self) -> u64 {
