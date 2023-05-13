@@ -8,6 +8,7 @@ pub trait Race {
     /// Creates a new instance of the race with the supported attributes.
     fn new(distance: u64, duration: Duration) -> Self;
 
+    /// Creates a new instance of the race using the desired pace to define the duration
     fn new_from_pace(distance: u64, pace: Duration) -> Self;
 
     /// Returns the distance of the race.
@@ -18,7 +19,10 @@ pub trait Race {
     
     /// Calculates the average pace based on distance and duration.
     fn average_pace(&self) -> Duration {
-        return Duration::new((Self::SPLIT_DISTANCE as f32 * (self.duration().as_secs() as f32 / self.distance() as f32)) as u64, 0);
+        return Duration::new(
+            (Self::SPLIT_DISTANCE as f32 * 
+            (self.duration().as_secs() as f32 / self.distance() as f32)
+        ) as u64, 0);
     }
 
     /// Calculates the speed of the runner to complete the distance within a duration.
@@ -33,11 +37,16 @@ pub trait Race {
 
     /// Returns the splits of the race, a vector of average paces.
     fn splits(&self) -> Vec<Duration> {
-        let mut splits = Vec::new();
         let average_pace = self.average_pace();
+        return self.splits_with_pace(average_pace);
+    }
 
+    /// Returns the splits of the race with a custom pace.
+    fn splits_with_pace(&self, pace: Duration) -> Vec<Duration> {
+        let mut splits = Vec::new();
+        
         for _n in 0..self.num_splits() {
-            splits.push(average_pace);
+            splits.push(pace);
         }
 
         return splits;
@@ -125,8 +134,18 @@ impl Race for ImperialRace {
         }
     }
 
-    fn new_from_pace(_distance: u64, _pace: Duration) -> Self {
-        todo!()
+    fn new_from_pace(distance: u64, pace: Duration) -> Self {
+        // Creates an imperial race without duration
+        let mut i_race = ImperialRace {
+            distance,
+            duration: None
+        };
+        let mut duration = ((i_race.distance() as f32 / Self::SPLIT_DISTANCE as f32) * pace.as_secs() as f32) as u64;
+        duration += (((i_race.distance() as f32 % Self::SPLIT_DISTANCE as f32) * pace.as_secs() as f32) / Self::SPLIT_DISTANCE as f32) as u64;
+
+        i_race.duration = Some(Duration::new(duration, 0));
+
+        return i_race;
     }
 
     fn distance(&self) -> u64 {
@@ -157,8 +176,18 @@ impl Race for MetricRace {
         }
     }
 
-    fn new_from_pace(_distance: u64, _pace: Duration) -> Self {
-        todo!()
+    fn new_from_pace(distance: u64, pace: Duration) -> Self {
+        let mut m_race = MetricRace {
+            distance,
+            duration: None
+        };
+
+        let mut duration = (m_race.distance() / Self::SPLIT_DISTANCE) * pace.as_secs();
+        duration += ((m_race.distance() % Self::SPLIT_DISTANCE) * pace.as_secs()) / Self::SPLIT_DISTANCE;
+
+        m_race.duration = Some(Duration::new(duration, 0));
+
+        return m_race;
     }
 
     fn distance(&self) -> u64 {
@@ -180,6 +209,17 @@ mod tests {
     use crate::Race;
     use crate::ImperialRace;
     use crate::MetricRace;
+
+    #[test]
+    fn test_new_metric_race() {
+        let duration = Duration::new(14400, 0);
+        let m_race: MetricRace = Race::new(42195, duration);
+        assert_eq!(m_race.distance, 42195);
+        assert_eq!(m_race.duration, Some(duration));
+
+        let mp_race: MetricRace = Race::new_from_pace(42195, m_race.average_pace());
+        assert_eq!(mp_race.duration, Some(duration));
+    }
 
     #[test]
     fn test_metric_average_pace() {
@@ -248,6 +288,17 @@ mod tests {
         assert_eq!(positive_splits[block as usize * 2].as_secs(), 346 - (degree.as_secs() * 2) as u64 + 2);
         assert_eq!(positive_splits[block as usize * variation as usize].as_secs(), 346 + 1);
         assert_eq!(positive_splits[block as usize * degree.as_secs() as usize].as_secs(), m_race.average_pace().as_secs());
+    }
+
+    #[test]
+    fn test_new_imperial_race() {
+        let duration = Duration::new(14400, 0);
+        let i_race: ImperialRace = Race::new(46112, duration);
+        assert_eq!(i_race.distance, 46112);
+        assert_eq!(i_race.duration, Some(duration));
+
+        let ip_race: ImperialRace = Race::new_from_pace(46112, i_race.average_pace());
+        assert_eq!(ip_race.duration, Some(duration));
     }
 
     #[test]
