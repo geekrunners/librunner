@@ -25,7 +25,10 @@ pub trait Race {
         ) as u64, 0)
     }
 
-    /// Calculates the speed of the runner to complete the distance within a duration.
+    /// Calculates the speed of the runner to complete a distance within a duration.
+    /// 
+    /// Examples:
+    /// 
     /// ```
     /// use std::time::Duration;
     /// use librunner::Race;
@@ -46,6 +49,19 @@ pub trait Race {
     }
 
     /// Calculates the number of splits based on the race distance and the split distance.
+    /// The split distance is defined in each Race implementation. 1 km is a tipical example of split.
+    /// 
+    /// Example:
+    /// 
+    /// ```
+    /// use std::time::Duration;
+    /// use librunner::Race;
+    /// use librunner::MetricRace;
+    /// 
+    /// let duration = Duration::new(14400, 0);
+    /// let m_race: MetricRace = Race::new(42195, duration);
+    /// assert_eq!(m_race.num_splits(), 43);
+    /// ```
     fn num_splits(&self) -> u64 {
         self.distance() / Self::SPLIT_DISTANCE + if (self.distance() % Self::SPLIT_DISTANCE) > 0 { 1 } else { 0 }
     }
@@ -172,6 +188,24 @@ impl Race for ImperialRace {
             Some(p) => p,
             None => Duration::new(0, 0)
         }
+    }
+}
+
+impl ImperialRace {
+    /// Calculates the speed of the runner in miles per hour (mph).
+    /// ```
+    /// use std::time::Duration;
+    /// use librunner::Race;
+    /// use librunner::ImperialRace;
+    /// 
+    /// // Race measured in imperial units
+    /// let duration = Duration::new(14400, 0); // seconds
+    /// let i_race: ImperialRace = Race::new(46112, duration); // yards
+    /// assert_eq!(i_race.speed_miles_hour(), 6.55); // mph
+    /// ```
+    pub fn speed_miles_hour(&self) -> f32 {
+        let miles = self.distance() as f32 / 1760.0;
+        miles / (self.duration().as_secs() as f32 / 60.0 / 60.0)
     }
 }
 
