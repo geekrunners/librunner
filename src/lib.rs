@@ -6,6 +6,18 @@ pub trait Race {
     const SPLIT_DISTANCE: u64;
 
     /// Creates a new instance of the race with the supported attributes.
+    /// 
+    /// Example:
+    /// 
+    /// ```
+    /// use std::time::Duration;
+    /// use librunner::Race;
+    /// use librunner::MetricRace;
+    /// 
+    /// // Race measured in metric units
+    /// let duration = Duration::new(14400, 0); // seconds
+    /// let m_race: MetricRace = Race::new(42195, duration); // meters
+    /// ```
     fn new(distance: u64, duration: Duration) -> Self;
 
     /// Creates a new instance of the race using the desired pace to define the duration
@@ -66,7 +78,7 @@ pub trait Race {
         self.distance() / Self::SPLIT_DISTANCE + if (self.distance() % Self::SPLIT_DISTANCE) > 0 { 1 } else { 0 }
     }
 
-    /// Returns the splits of the race, a vector of average paces.
+    /// Returns the splits of the race, with the average pace in each split.
     fn splits(&self) -> Vec<Duration> {
         let average_pace = self.average_pace();
         self.splits_with_pace(average_pace)
