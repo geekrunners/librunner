@@ -20,7 +20,18 @@ pub trait Race {
     /// ```
     fn new(distance: u64, duration: Duration) -> Self;
 
-    /// Creates a new instance of the race using the desired pace to define the duration
+    /// Creates a new instance of the race using the desired pace to calculate the duration.
+    /// 
+    /// Example:
+    /// ```
+    /// use std::time::Duration;
+    /// use librunner::Race;
+    /// use librunner::MetricRace;
+    /// 
+    /// // Race measured in metric units
+    /// let pace = Duration::new(341, 0); // seconds
+    /// let m_race: MetricRace = Race::new_from_pace(42195, pace); // meters
+    /// ```
     fn new_from_pace(distance: u64, pace: Duration) -> Self;
 
     /// Returns the distance of the race.
