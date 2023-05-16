@@ -1,6 +1,6 @@
 [package]
 name = "librunner"
-version = "0.2.2"
+version = "0.3.0"
 edition = "2021"
 license = "Apache-2.0"
 description = "Rust library to assist runners on planning their workouts, races, and improve their health."
