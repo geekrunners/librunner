@@ -193,9 +193,8 @@ impl Race for ImperialRace {
             distance,
             duration: None
         };
-        let mut duration = (i_race.distance() as f32 / Self::SPLIT_DISTANCE as f32) * pace.as_secs() as f32;
-        duration += ((i_race.distance() as f32 % Self::SPLIT_DISTANCE as f32) * pace.as_secs() as f32) / Self::SPLIT_DISTANCE as f32;
-
+        let duration = (i_race.distance() as f32 / Self::SPLIT_DISTANCE as f32) * pace.as_secs() as f32;
+        
         i_race.duration = Some(Duration::new(duration as u64, 0));
 
         i_race
@@ -253,9 +252,8 @@ impl Race for MetricRace {
             duration: None
         };
 
-        let mut duration = (m_race.distance() as f32 / Self::SPLIT_DISTANCE as f32) * pace.as_secs() as f32;
-        //duration += ((m_race.distance() as f32 % Self::SPLIT_DISTANCE as f32) * pace.as_secs() as f32) / Self::SPLIT_DISTANCE as f32;
-
+        let duration = (m_race.distance() as f32 / Self::SPLIT_DISTANCE as f32) * pace.as_secs() as f32;
+        
         m_race.duration = Some(Duration::new(duration as u64, 0));
 
         m_race
@@ -372,7 +370,7 @@ mod tests {
         let ip_race: ImperialRace = Race::new_from_pace(46112, Duration::new(549, 0));
         // The duration calculated from the pace correct, 
         // but there is a precision issue that needs to be addressed in the future.
-        assert_eq!(ip_race.duration, Some(Duration::new(14493, 0)));
+        assert_eq!(ip_race.duration, Some(Duration::new(14383, 0)));
     }
 
     #[test]
