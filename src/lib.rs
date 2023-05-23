@@ -1,3 +1,36 @@
+pub mod utils {
+    pub mod convert {
+        use std::time::Duration;
+
+        /// Creates a Duration based on the arguments hours, minutes, and seconds.
+        ///
+        /// Example:
+        ///
+        /// ```
+        /// use librunner::utils::convert;
+        ///
+        /// let duration = convert::to_duration(4, 5, 19); // 04:05:19
+        /// assert_eq!(duration.as_secs(), 14719);
+        /// ```
+        pub fn to_duration(hours: u64, minutes: u64, seconds: u64) -> Duration {
+            let mins = if hours > 0 { hours * 60 } else { 0 } + minutes;
+            let secs = if mins > 0 { mins * 60 } else { 0 } + seconds;
+            Duration::new(secs, 0)
+        }
+
+        #[cfg(test)]
+        mod tests {
+            use crate::utils::convert;
+
+            #[test]
+            fn test_to_duration() {
+                let duration = convert::to_duration(4, 5, 19);
+                assert_eq!(duration.as_secs(), 14719);
+            }
+        }
+    }
+}
+
 pub mod running {
     use std::time::Duration;
 

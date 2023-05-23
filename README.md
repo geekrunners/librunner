@@ -12,10 +12,11 @@ Call it in the source code:
 
 ```rust
 use std::time::Duration;
-use librunner::{Race, MetricRace, ImperialRace};
+use librunner::running::{Race, MetricRace, ImperialRace};
+use librunner::utils::convert;
 
 fn main() {
-    let duration = Duration::new(14400, 0);
+    let duration = convert::to_duration(4, 0, 0); // 04:00:00
     let m_race: MetricRace = Race::new(42195, duration);
     let m_average_pace = m_race.average_pace();
 
