@@ -1,5 +1,7 @@
+/// Utility functions to convert, format and do other things with values.
 pub mod utils {
-    pub mod convert {
+    /// Converts values between units and types.
+    pub mod converter {
         use std::time::Duration;
 
         /// Creates a Duration based on the arguments hours, minutes, and seconds.
@@ -31,6 +33,7 @@ pub mod utils {
     }
 }
 
+/// API to make running calculations.
 pub mod running {
     use std::time::Duration;
 
