@@ -9,9 +9,9 @@ pub mod utils {
         /// Example:
         ///
         /// ```
-        /// use librunner::utils::convert;
+        /// use librunner::utils::converter;
         ///
-        /// let duration = convert::to_duration(4, 5, 19); // 04:05:19
+        /// let duration = converter::to_duration(4, 5, 19); // 04:05:19
         /// assert_eq!(duration.as_secs(), 14719);
         /// ```
         pub fn to_duration(hours: u64, minutes: u64, seconds: u64) -> Duration {
@@ -22,11 +22,11 @@ pub mod utils {
 
         #[cfg(test)]
         mod tests {
-            use crate::utils::convert;
+            use crate::utils::converter;
 
             #[test]
             fn test_to_duration() {
-                let duration = convert::to_duration(4, 5, 19);
+                let duration = converter::to_duration(4, 5, 19);
                 assert_eq!(duration.as_secs(), 14719);
             }
         }
