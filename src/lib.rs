@@ -31,6 +31,53 @@ pub mod utils {
             }
         }
     }
+
+    /// Formats values to make them human-readable.
+    pub mod formatter {
+        use std::time::Duration;
+
+        /// Formats a duration to a human readable text.
+        ///
+        /// Example:
+        ///
+        /// ```
+        /// use librunner::utils::formatter;
+        /// use librunner::utils::converter;
+        ///
+        /// let duration = converter::to_duration(4, 5, 19);
+        /// println!("Duration: {}", formatter::format_duration(duration));
+        /// ```
+        ///
+        /// It prints "Duration: 04:05:19".
+        pub fn format_duration(duration: Duration) -> String {
+            let mut secs = duration.as_secs();
+            let mut mins = 0;
+            let mut hors = 0;
+
+            if secs >= 60 {
+                mins = secs / 60;
+                secs = secs % 60;
+                hors = mins / 60;
+                mins = mins % 60;
+            }
+            format!("{:02}:{:02}:{:02}", hors, mins, secs)
+        }
+
+        #[cfg(test)]
+        mod tests {
+            use crate::utils::converter;
+            use crate::utils::formatter;
+
+            #[test]
+            fn test_format_duration() {
+                assert_eq!(formatter::format_duration(converter::to_duration(0, 0, 0)), "00:00:00");
+                assert_eq!(formatter::format_duration(converter::to_duration(0, 0, 9)), "00:00:09");
+                assert_eq!(formatter::format_duration(converter::to_duration(0, 5, 9)), "00:05:09");
+                assert_eq!(formatter::format_duration(converter::to_duration(4, 5, 19)), "04:05:19");
+                assert_eq!(formatter::format_duration(converter::to_duration(135, 59, 1)), "135:59:01");
+            }
+        }
+    }
 }
 
 /// API to make running calculations.
