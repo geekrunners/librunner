@@ -1,10 +1,10 @@
 # Lib Runner
 
-Rust library to assist runners on planning their workouts, races, and improve their health.
+Rust package to assist runners in planning workouts, completing races, and improving health.
 
 ## Usage
 
-Run the following Cargo command in your project folder:
+Run the following Cargo command in your Rust project folder:
 
     $ cargo add librunner
 
