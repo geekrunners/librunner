@@ -3,4 +3,5 @@ Cargo.lock
 src/main.rs
 
 .idea/
+.vscode/
 target/
