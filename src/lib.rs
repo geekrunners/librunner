@@ -125,6 +125,27 @@ pub mod running {
         fn duration(&self) -> Duration;
         
         /// Calculates the average pace based on distance and duration.
+        /// 
+        /// Examples:
+        /// 
+        /// ```
+        /// use std::time::Duration;
+        /// use librunner::running::{Race, ImperialRace, MetricRace};
+        /// 
+        /// let duration = Duration::new(14400, 0);
+        /// 
+        /// // Imperial marathon race. Average pace: 9:09/mile
+        /// let i_race: ImperialRace = Race::new(46112, duration);
+        /// assert_eq!(i_race.average_pace().as_secs(), 549);
+        /// assert_eq!(i_race.average_pace().as_secs() / 60, 9);
+        /// assert_eq!(i_race.average_pace().as_secs() % 60, 9);
+        /// 
+        /// // Metric marathon race. Average pace: 5:41/km
+        /// let m_race: MetricRace = Race::new(42195, duration);
+        /// assert_eq!(m_race.average_pace().as_secs(), 341);
+        /// assert_eq!(m_race.average_pace().as_secs() / 60, 5);
+        /// assert_eq!(m_race.average_pace().as_secs() % 60, 41);
+        /// ```
         fn average_pace(&self) -> Duration {
             return Duration::new(
                 (Self::SPLIT_DISTANCE as f32 * (self.duration().as_secs() as f32 / self.distance() as f32)
