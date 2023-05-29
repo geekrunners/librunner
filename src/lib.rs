@@ -365,6 +365,50 @@ mod tests {
     use crate::running::MetricRace;
 
     #[test]
+    fn test_new_imperial_race() {
+        let duration = Duration::new(14400, 0);
+        let i_race: ImperialRace = Race::new(46112, duration);
+        assert_eq!(i_race.distance, 46112);
+        assert_eq!(i_race.duration, Some(duration));
+    }
+
+    #[test]
+    fn test_new_imperial_from_pace() {
+        let ip_race: ImperialRace = Race::new_from_pace(46112, Duration::new(549, 0));
+        // The duration calculated from the pace correct, 
+        // but there is a precision issue that needs to be addressed in the future.
+        assert_eq!(ip_race.duration, Some(Duration::new(14383, 0)));
+    }
+
+    #[test]
+    fn test_imperial_average_pace() {
+        let duration = Duration::new(14400, 0);
+        let i_race: ImperialRace = Race::new(46112, duration);
+        assert_eq!(i_race.average_pace().as_secs(), 549);
+        assert_eq!(i_race.average_pace().as_secs() / 60, 9);
+        assert_eq!(i_race.average_pace().as_secs() % 60, 9);
+    }
+
+    #[test]
+    fn test_imperial_num_splits() {
+        let duration = Duration::new(14400, 0);
+        let i_race: ImperialRace = Race::new(46112, duration);
+        assert_eq!(i_race.num_splits(), 27);
+    }
+
+    #[test]
+    fn test_imperial_splits_duration() {
+        let duration = Duration::new(14400, 0);
+        let i_race: ImperialRace = Race::new(46112, duration);
+        let splits = i_race.splits();
+        let average_pace = i_race.average_pace();
+
+        for split in splits {
+            assert_eq!(split, average_pace);
+        }
+    }
+
+    #[test]
     fn test_new_metric_race() {
         let duration = Duration::new(14400, 0);
         let m_race: MetricRace = Race::new(42195, duration);
@@ -440,49 +484,5 @@ mod tests {
         assert_eq!(positive_splits[block as usize * 2].as_secs(), 346 - (degree.as_secs() * 2) as u64 + 2);
         assert_eq!(positive_splits[block as usize * variation as usize].as_secs(), 346 + 1);
         assert_eq!(positive_splits[block as usize * degree.as_secs() as usize].as_secs(), m_race.average_pace().as_secs());
-    }
-
-    #[test]
-    fn test_new_imperial_race() {
-        let duration = Duration::new(14400, 0);
-        let i_race: ImperialRace = Race::new(46112, duration);
-        assert_eq!(i_race.distance, 46112);
-        assert_eq!(i_race.duration, Some(duration));
-    }
-
-    #[test]
-    fn test_new_imperial_from_pace() {
-        let ip_race: ImperialRace = Race::new_from_pace(46112, Duration::new(549, 0));
-        // The duration calculated from the pace correct, 
-        // but there is a precision issue that needs to be addressed in the future.
-        assert_eq!(ip_race.duration, Some(Duration::new(14383, 0)));
-    }
-
-    #[test]
-    fn test_imperial_average_pace() {
-        let duration = Duration::new(14400, 0);
-        let i_race: ImperialRace = Race::new(46112, duration);
-        assert_eq!(i_race.average_pace().as_secs(), 549);
-        assert_eq!(i_race.average_pace().as_secs() / 60, 9);
-        assert_eq!(i_race.average_pace().as_secs() % 60, 9);
-    }
-
-    #[test]
-    fn test_imperial_num_splits() {
-        let duration = Duration::new(14400, 0);
-        let i_race: ImperialRace = Race::new(46112, duration);
-        assert_eq!(i_race.num_splits(), 27);
-    }
-
-    #[test]
-    fn test_imperial_splits_duration() {
-        let duration = Duration::new(14400, 0);
-        let i_race: ImperialRace = Race::new(46112, duration);
-        let splits = i_race.splits();
-        let average_pace = i_race.average_pace();
-
-        for split in splits {
-            assert_eq!(split, average_pace);
-        }
     }
 }
