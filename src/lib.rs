@@ -118,6 +118,8 @@ pub mod running {
         /// ```
         fn new_from_pace(distance: u64, pace: Duration) -> Self;
 
+        fn new_from_splits(splits: Vec<Duration>) -> Self;
+
         /// Returns the distance of the race.
         fn distance(&self) -> u64;
 
@@ -305,6 +307,20 @@ pub mod running {
             i_race
         }
 
+        fn new_from_splits(splits: Vec<Duration>) -> Self {
+            let distance = splits.len() as u64 * Self::SPLIT_DISTANCE;
+            
+            let mut duration = 0;
+            for split in splits {
+                duration += duration + split.as_secs();
+            }
+
+            ImperialRace {
+                distance,
+                duration: Some(Duration::new(duration, 0))
+            }
+        }
+
         fn distance(&self) -> u64 {
             self.distance
         }
@@ -362,6 +378,20 @@ pub mod running {
             m_race.duration = Some(Duration::new(duration as u64, 0));
 
             m_race
+        }
+
+        fn new_from_splits(splits: Vec<Duration>) -> Self {
+            let distance = splits.len() as u64 * Self::SPLIT_DISTANCE;
+            
+            let mut duration = 0;
+            for split in splits {
+                duration += duration + split.as_secs();
+            }
+
+            MetricRace {
+                distance,
+                duration: Some(Duration::new(duration, 0))
+            }
         }
 
         fn distance(&self) -> u64 {
