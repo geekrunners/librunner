@@ -415,6 +415,8 @@ mod tests {
     use crate::running::ImperialRace;
     use crate::running::MetricRace;
 
+    use crate::utils::converter;
+
     #[test]
     fn test_new_imperial_race() {
         let duration = Duration::new(14400, 0);
@@ -429,6 +431,23 @@ mod tests {
         // The duration calculated from the pace correct, 
         // but there is a precision issue that needs to be addressed in the future.
         assert_eq!(ip_race.duration, Some(Duration::new(14383, 0)));
+    }
+
+    #[test]
+    fn test_new_imperial_from_splits() {
+        let mut splits: Vec<Duration> = Vec::new();
+        splits.push(converter::to_duration(0, 5, 53));
+        splits.push(converter::to_duration(0, 5, 38));
+        splits.push(converter::to_duration(0, 5, 44));
+        splits.push(converter::to_duration(0, 5, 37));
+        splits.push(converter::to_duration(0, 5, 29));
+    
+        let five_miles_race: ImperialRace = Race::new_from_splits(splits);
+
+        assert_eq!(five_miles_race.distance(), 8800);
+        assert_eq!(five_miles_race.average_pace().as_secs() / 60, 5);
+        assert_eq!(five_miles_race.average_pace().as_secs() % 60, 40);
+        assert_eq!(five_miles_race.duration().as_secs(), 1701);
     }
 
     #[test]
@@ -473,6 +492,23 @@ mod tests {
         // The duration calculated from the pace correct, 
         // but there is a precision issue that needs to be addressed in the future.
         assert_eq!(mp_race.duration, Some(Duration::new(14388, 0)));
+    }
+
+    #[test]
+    fn test_new_metric_from_splits() {
+        let mut splits: Vec<Duration> = Vec::new();
+        splits.push(converter::to_duration(0, 5, 53));
+        splits.push(converter::to_duration(0, 5, 38));
+        splits.push(converter::to_duration(0, 5, 44));
+        splits.push(converter::to_duration(0, 5, 37));
+        splits.push(converter::to_duration(0, 5, 29));
+    
+        let five_miles_race: MetricRace = Race::new_from_splits(splits);
+
+        assert_eq!(five_miles_race.distance(), 5000);
+        assert_eq!(five_miles_race.average_pace().as_secs() / 60, 5);
+        assert_eq!(five_miles_race.average_pace().as_secs() % 60, 40);
+        assert_eq!(five_miles_race.duration().as_secs(), 1701);
     }
 
     #[test]
