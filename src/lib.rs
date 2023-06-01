@@ -89,7 +89,7 @@ pub mod running {
         /// The distance of one split in an implemented scale.
         const SPLIT_DISTANCE: u64;
 
-        /// Creates a new instance of the race with the supported attributes.
+        /// Creates a new race with the basic attributes.
         /// 
         /// Example:
         /// 
@@ -104,9 +104,10 @@ pub mod running {
         /// ```
         fn new(distance: u64, duration: Duration) -> Self;
 
-        /// Creates a new instance of the race using the desired pace to calculate the duration.
+        /// Creates a new race using the desired pace to calculate the duration.
         /// 
         /// Example:
+        /// 
         /// ```
         /// use std::time::Duration;
         /// use librunner::running::Race;
@@ -118,6 +119,30 @@ pub mod running {
         /// ```
         fn new_from_pace(distance: u64, pace: Duration) -> Self;
 
+        /// Creates a new race using splits to calculate distance and duration.
+        /// 
+        /// Example:
+        /// 
+        /// ```
+        /// use std::time::Duration;
+        /// use librunner::running::Race;
+        /// use librunner::running::ImperialRace;
+        /// use librunner::utils::converter;
+        /// 
+        /// let mut splits: Vec<Duration> = Vec::new();
+        /// splits.push(converter::to_duration(0, 5, 53));
+        /// splits.push(converter::to_duration(0, 5, 38));
+        /// splits.push(converter::to_duration(0, 5, 44));
+        /// splits.push(converter::to_duration(0, 5, 37));
+        /// splits.push(converter::to_duration(0, 5, 29));
+        ///
+        /// let five_miles_race: ImperialRace = Race::new_from_splits(splits);
+        ///
+        /// println!("The pacer ran {} km at an average pace of {}.{}/km.",
+        ///          five_miles_race.distance() / 1000,
+        ///          five_miles_race.average_pace().as_secs() / 60,
+        ///          five_miles_race.average_pace().as_secs() % 60);
+        /// ```
         fn new_from_splits(splits: Vec<Duration>) -> Self;
 
         /// Returns the distance of the race.
