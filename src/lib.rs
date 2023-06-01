@@ -312,7 +312,7 @@ pub mod running {
             
             let mut duration = 0;
             for split in splits {
-                duration += duration + split.as_secs();
+                duration += split.as_secs();
             }
 
             ImperialRace {
@@ -385,7 +385,7 @@ pub mod running {
             
             let mut duration = 0;
             for split in splits {
-                duration += duration + split.as_secs();
+                duration += split.as_secs();
             }
 
             MetricRace {
