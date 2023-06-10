@@ -60,7 +60,12 @@ pub mod utils {
                 hors = mins / 60;
                 mins = mins % 60;
             }
-            format!("{:02}:{:02}:{:02}", hors, mins, secs)
+
+            if hors == 0 {
+                format!("{:02}:{:02}", mins, secs)
+            } else {
+                format!("{:02}:{:02}:{:02}", hors, mins, secs)
+            }
         }
 
         #[cfg(test)]
@@ -70,9 +75,9 @@ pub mod utils {
 
             #[test]
             fn test_format_duration() {
-                assert_eq!(formatter::format_duration(converter::to_duration(0, 0, 0)), "00:00:00");
-                assert_eq!(formatter::format_duration(converter::to_duration(0, 0, 9)), "00:00:09");
-                assert_eq!(formatter::format_duration(converter::to_duration(0, 5, 9)), "00:05:09");
+                assert_eq!(formatter::format_duration(converter::to_duration(0, 0, 0)), "00:00");
+                assert_eq!(formatter::format_duration(converter::to_duration(0, 0, 9)), "00:09");
+                assert_eq!(formatter::format_duration(converter::to_duration(0, 5, 9)), "05:09");
                 assert_eq!(formatter::format_duration(converter::to_duration(4, 5, 19)), "04:05:19");
                 assert_eq!(formatter::format_duration(converter::to_duration(135, 59, 1)), "135:59:01");
             }
