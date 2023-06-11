@@ -39,11 +39,11 @@ Let's go through these quick steps to get started with LibRunner:
       ```rust
       use std::time::Duration;
       use librunner::running::{Race, MetricRace, ImperialRace};
-      use librunner::utils::convert;
+      use librunner::utils::converter;
       use librunner::utils::formatter;
 
       fn main() {
-          let duration = convert::to_duration(4, 0, 0); // 04:00:00
+          let duration = converter::to_duration(4, 0, 0); // 04:00:00
           let m_race: MetricRace = Race::new(42195, duration);
           let m_average_pace = m_race.average_pace();
 
@@ -51,7 +51,7 @@ Let's go through these quick steps to get started with LibRunner:
                    (m_race.distance as f32 / 1000.0),    // meter to kilometer
                    formatter::format_duration(duration), 
                    formatter::format_duration(m_average_pace.as_secs()),
-                   (m_race.speed() * 3.6));
+                   converter::to_km_h(m_race.speed()));
 
           let i_race: ImperialRace = Race::new(46112, duration);
           let i_average_pace = i_race.average_pace();
@@ -60,7 +60,7 @@ Let's go through these quick steps to get started with LibRunner:
                    (i_race.distance as f32 / 1760.0), 
                    formatter::format_duration(duration.as_secs()),
                    formatter::format_duration(i_average_pace.as_secs()),
-                   (i_race.speed() * 3.6));
+                   (i_race.speed() * 2.04545));
       }
       ```
 5. then run the project again:
