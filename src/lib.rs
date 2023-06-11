@@ -20,6 +20,10 @@ pub mod utils {
             Duration::new(secs, 0)
         }
 
+        pub fn to_km_h(m_s: f32) -> f32 {
+            m_s * 3.6
+        }
+
         #[cfg(test)]
         mod tests {
             use crate::utils::converter;
@@ -28,6 +32,12 @@ pub mod utils {
             fn test_to_duration() {
                 let duration = converter::to_duration(4, 5, 19);
                 assert_eq!(duration.as_secs(), 14719);
+            }
+
+            #[test]
+            fn test_to_km_h() {
+                assert_eq!(converter::to_km_h(2.80), 10.08);
+                assert_eq!(converter::to_km_h(10.0), 36.0);
             }
         }
     }
