@@ -20,6 +20,16 @@ pub mod utils {
             Duration::new(secs, 0)
         }
 
+        /// Converts metters per second (m/s) to kilometers per hour (km/h).
+        /// It is useful for converting raw values to readable ones.
+        /// 
+        /// Example:
+        /// 
+        /// ```
+        /// use librunner::utils::converter;
+        /// 
+        /// assert_eq!(converter::to_km_h(10.0), 36.0);
+        /// ```
         pub fn to_km_h(m_s: f32) -> f32 {
             m_s * 3.6
         }
