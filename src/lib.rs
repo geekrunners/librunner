@@ -34,6 +34,21 @@ pub mod utils {
             m_s * 3.6
         }
 
+        /// Converts yards per second (y/s) to miles per hour (mph).
+        /// It is useful for converting raw values to readable ones.
+        /// 
+        /// Example:
+        /// 
+        /// ```
+        /// use librunner::utils::converter;
+        /// 
+        /// assert_eq!(converter::to_mph(1.0), 2.04545);
+        /// assert_eq!(converter::to_mph(6.0), 12.272699);
+        /// ```
+        pub fn to_mph(y_s: f32) -> f32 {
+            y_s * 2.04545
+        }
+
         #[cfg(test)]
         mod tests {
             use crate::utils::converter;
