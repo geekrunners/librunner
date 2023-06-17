@@ -1,5 +1,7 @@
 # How To Contribute
 
+First of all, it is a great honour to have you as a user of LibRunner. Thank you! It would be great to learn more about your experience. If you could share some feedback about the documentation, the examples, the readability, and even the code, you would help us to make it better. If you want to go a step further, making improvements yourself and submitting pull requests, you would also have the authorship of your ideas on the records.
+
 ## Publishing a New Version
 
 1. Run all tests to make sure everything is still working as expected:
