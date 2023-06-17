@@ -49,6 +49,19 @@ pub mod utils {
             y_s * 2.04545
         }
 
+        /// Converts meters (m) to kilometers (km).
+        /// 
+        /// Example:
+        /// ```
+        /// use librunner::utils::converter;
+        /// 
+        /// assert_eq!(converter::to_km(1000), 1.0);
+        /// assert_eq!(converter::to_km(42195), 42.195);
+        /// ```
+        pub fn to_km(m : u64) -> f32 {
+            m as f32 / 1000.0
+        }
+
         #[cfg(test)]
         mod tests {
             use crate::utils::converter;
