@@ -45,21 +45,19 @@ Let's go through these quick steps to get started with LibRunner:
       fn main() {
           let duration = converter::to_duration(4, 0, 0); // 04:00:00
           let m_race: MetricRace = Race::new(42195, duration);
-          let m_average_pace = m_race.average_pace();
 
           println!("The pace to run {}km in {}h is approximately {}/km at {:.2}km/h", 
                    converter::to_km(m_race.distance),
-                   formatter::format_duration(duration), 
-                   formatter::format_duration(m_average_pace),
+                   formatter::format_duration(m_race.duration()), 
+                   formatter::format_duration(m_race.average_pace()),
                    converter::to_km_h(m_race.speed()));
 
           let i_race: ImperialRace = Race::new(46112, duration);
-          let i_average_pace = i_race.average_pace();
 
           println!("The pace to run {} miles in {}h is approximately {}/mile at {:.2}mph", 
                    converter::to_mile(i_race.distance), 
-                   formatter::format_duration(duration),
-                   formatter::format_duration(i_average_pace),
+                   formatter::format_duration(i_race.duration()),
+                   formatter::format_duration(i_race.average_pace()),
                    converter::to_mph(i_race.speed()));
       }
       ```
