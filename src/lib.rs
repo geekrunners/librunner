@@ -58,8 +58,21 @@ pub mod utils {
         /// assert_eq!(converter::to_km(1000), 1.0);
         /// assert_eq!(converter::to_km(42195), 42.195);
         /// ```
-        pub fn to_km(m : u64) -> f32 {
+        pub fn to_km(m: u64) -> f32 {
             m as f32 / 1000.0
+        }
+
+        /// Converts yards (y) to miles.
+        /// 
+        /// Example:
+        /// ```
+        /// use librunner::utils::converter;
+        /// 
+        /// assert_eq!(converter::to_mile(1760), 1.0);
+        /// assert_eq!(converter::to_mile(46112), 26.2);
+        /// ```
+        pub fn to_mile(y: u64) -> f32 {
+            y as f32 / 1760.0
         }
 
         #[cfg(test)]
