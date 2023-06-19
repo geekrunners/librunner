@@ -69,3 +69,7 @@ Let's go through these quick steps to get started with LibRunner:
 
        The pace to run 42.195km in 04:00:00h is approximately 05.41/km at 10.55km/h
        The pace to run 26.2 miles in 04:00:00h is approximately 09.09/mile at 11.53mph
+
+## License
+
+LibRunner is used under the terms of the [Apache License version 2.0](https://github.com/geekrunners/librunner/blob/main/LICENSE).
