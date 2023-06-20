@@ -369,6 +369,10 @@ pub mod running {
         }
     }
 
+    pub trait Runner {
+        fn bmi(&self) -> f32;
+    }
+
     /// A running race using the imperial scale, such as miles and yards.
     pub struct ImperialRace {
         pub distance: u64,
