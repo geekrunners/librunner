@@ -369,13 +369,9 @@ pub mod running {
         }
     }
 
-    pub trait Runner {
-        fn bmi(&self) -> f32;
-    }
-
     /// A running race using the imperial scale, such as miles and yards.
     pub struct ImperialRace {
-        pub distance: u64,
+        pub distance: u64, // yards
         pub duration: Option<Duration>
     }
 
@@ -448,7 +444,7 @@ pub mod running {
 
     /// A running race using the metric scale, such as kilometers and metters.
     pub struct MetricRace {
-        pub distance: u64,
+        pub distance: u64, // meters
         pub duration: Option<Duration>
     }
 
@@ -499,6 +495,22 @@ pub mod running {
                 None => Duration::new(0, 0)
             }
         }
+    }
+
+    pub trait Runner {
+        fn bmi(&self) -> f32;
+    }
+
+    pub struct MetricRunner {
+        pub weight: u64, // grams 
+        pub height: u64, // centimeters
+        pub age:    u64  // years
+    }
+
+    pub struct ImperialRunner {
+        pub weight: u64, // lbs
+        pub height: u64, // ft
+        pub age:    u64  // years
     }
 }
 
