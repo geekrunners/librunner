@@ -498,6 +498,20 @@ pub mod running {
     }
 
     pub trait Runner {
+        /// Creates a new runner with the basic attributes.
+        /// 
+        /// Example:
+        /// 
+        /// ```
+        /// use librunner::running::Runner;
+        /// use librunner::running::MetricRunner;
+        /// use librunner::running::ImperialRunner;
+        /// 
+        /// let i_runner: ImperialRunner = Runner::new(187.425, 5.8, 44);
+        /// let m_runner: MetricRunner = Runner::new(85.0, 1.79, 44);
+        /// ```
+        fn new(weight: f32, height: f32, age: u64) -> Self;
+
         fn bmi(&self) -> f32;
     }
 
@@ -508,6 +522,14 @@ pub mod running {
     }
 
     impl Runner for MetricRunner {
+        fn new(weight: f32, height: f32, age: u64) -> Self {
+            MetricRunner { 
+                weight: weight, 
+                height: height, 
+                age: age 
+            }
+        }
+
         fn bmi(&self) -> f32 {
             self.weight / (self.height * self.height)
         }
@@ -520,6 +542,14 @@ pub mod running {
     }
 
     impl Runner for ImperialRunner {
+        fn new(weight: f32, height: f32, age: u64) -> Self {
+            ImperialRunner { 
+                weight: weight, 
+                height: height, 
+                age: age 
+            }
+        }
+        
         fn bmi(&self) -> f32 {
             (self.weight / (self.height * self.height)) * 703.0
         }
