@@ -502,15 +502,27 @@ pub mod running {
     }
 
     pub struct MetricRunner {
-        pub weight: u64, // grams 
-        pub height: u64, // centimeters
+        pub weight: f32, // kilograms 
+        pub height: f32, // meters
         pub age:    u64  // years
     }
 
+    impl Runner for MetricRunner {
+        fn bmi(&self) -> f32 {
+            self.weight / (self.height * self.height)
+        }
+    }
+
     pub struct ImperialRunner {
-        pub weight: u64, // lbs
-        pub height: u64, // ft
+        pub weight: f32, // lbs
+        pub height: f32, // ft
         pub age:    u64  // years
+    }
+
+    impl Runner for ImperialRunner {
+        fn bmi(&self) -> f32 {
+            (self.weight / (self.height * self.height)) * 703.0
+        }
     }
 }
 
