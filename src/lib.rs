@@ -552,16 +552,16 @@ pub mod running {
 
     pub struct ImperialRunner {
         pub weight: f32, // lbs
-        pub height: f32, // ft
+        pub height: f32, // in
         pub age:    u64  // years
     }
 
     impl Runner for ImperialRunner {
         fn new(weight: f32, height: f32, age: u64) -> Self {
             ImperialRunner { 
-                weight: weight, 
-                height: height, 
-                age: age 
+                weight: weight,
+                height: height,
+                age: age
             }
         }
         
