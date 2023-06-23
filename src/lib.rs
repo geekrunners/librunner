@@ -507,11 +507,26 @@ pub mod running {
         /// use librunner::running::MetricRunner;
         /// use librunner::running::ImperialRunner;
         /// 
-        /// let i_runner: ImperialRunner = Runner::new(187.425, 5.8, 44);
+        /// let i_runner: ImperialRunner = Runner::new(187.425, 70.47, 44);
         /// let m_runner: MetricRunner = Runner::new(85.0, 1.79, 44);
         /// ```
         fn new(weight: f32, height: f32, age: u64) -> Self;
 
+        /// Calculates runner's BMI
+        /// 
+        /// Example:
+        /// 
+        /// ```
+        /// use librunner::running::Runner;
+        /// use librunner::running::MetricRunner;
+        /// use librunner::running::ImperialRunner;
+        /// 
+        /// let i_runner: ImperialRunner = Runner::new(187.425, 70.47, 44);
+        /// 
+        /// let m_runner: MetricRunner = Runner::new(85.0, 1.79, 44);
+        /// 
+        /// assert_eq!(i_runner.bmi() as u64, m_runner.bmi() as u64);
+        /// ```
         fn bmi(&self) -> f32;
     }
 
@@ -551,7 +566,7 @@ pub mod running {
         }
         
         fn bmi(&self) -> f32 {
-            (self.weight / (self.height * self.height)) * 703.0
+            self.weight / (self.height * self.height) * 703.0
         }
     }
 }
