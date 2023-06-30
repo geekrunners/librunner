@@ -88,6 +88,18 @@ pub mod utils {
             y as f32 / 1760.0
         }
 
+        /// Converts kilometers to miles.
+        /// 
+        /// Example:
+        /// ```
+        /// use librunner::utils::converter;
+        /// 
+        /// assert_eq!(converter::km_to_mile(16.0934), 10.0);
+        /// ```
+        pub fn km_to_mile(km: f32) -> f32 {
+            km / 1.60934
+        }
+
         #[cfg(test)]
         mod tests {
             use crate::utils::converter;
