@@ -582,6 +582,22 @@ pub mod running {
             self.weight / (self.height * self.height) * 703.0
         }
     }
+
+    pub trait Running {
+        //fn new(race: dyn Race, runner: dyn Runner) -> Self;
+
+        fn duration(&self) -> u64;
+
+        fn average_pace(&self) -> Duration;
+
+        fn speed(&self) -> f32;
+
+        fn splits(&self) -> Vec<Duration>;
+
+        fn negative_splits(&self) -> Vec<Duration>;
+
+        fn positive_splits(&self) -> Vec<Duration>;
+    }
 }
 
 #[cfg(test)]
