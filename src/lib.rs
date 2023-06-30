@@ -100,7 +100,7 @@ pub mod utils {
             km / 1.60934
         }
 
-        /// Converts meters to feet
+        /// Converts meters to feet.
         /// 
         /// Example:
         /// ```
@@ -112,7 +112,7 @@ pub mod utils {
             m * 3.28084
         }
 
-        /// Converts feet to meters
+        /// Converts feet to meters.
         /// 
         /// Example:
         /// ```
