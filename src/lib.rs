@@ -100,6 +100,18 @@ pub mod utils {
             km / 1.60934
         }
 
+        /// Converts meters to feet
+        /// 
+        /// Example:
+        /// ```
+        /// use librunner::utils::converter;
+        /// 
+        /// assert_eq!(converter::meter_to_feet(100.0), 328.08398);
+        /// ```
+        pub fn meter_to_feet(m: f32) -> f32 {
+            m * 3.28084
+        }
+
         #[cfg(test)]
         mod tests {
             use crate::utils::converter;
