@@ -197,7 +197,7 @@ pub mod utils {
 
 /// API to make running calculations.
 pub mod running {
-    use std::{time::Duration, any::Any};
+    use std::time::Duration;
 
     /// A running race, already with common calculations that work with multiple scales.
     pub trait Race {
@@ -265,8 +265,6 @@ pub mod running {
 
         /// Returns the duration of the race.
         fn duration(&self) -> Duration;
-
-        fn as_any(&self) -> &dyn Any;
         
         /// Calculates the average pace based on distance and duration.
         /// 
@@ -408,10 +406,6 @@ pub mod running {
                 None => Duration::new(0, 0)
             }
         }
-
-        fn as_any(&self) -> &dyn Any {
-            self
-        }
     }
 
     impl ImperialRace {
@@ -484,10 +478,6 @@ pub mod running {
                 Some(p) => p,
                 None => Duration::new(0, 0)
             }
-        }
-
-        fn as_any(&self) -> &dyn Any {
-            self
         }
     }
 
