@@ -21,7 +21,7 @@ Let's go through these quick steps to get started with LibRunner:
        $ cd runningapp
        $ cargo run
 
-4. it prints "Hello World", meaning you have a working code to start from. Open the project in your favourite code editor and make two changes:
+4. it prints "Hello World", meaning you have a working code to start from. Open the project in your favorite code editor and make two changes:
 
    4.1. add LibRunner to the project's dependencies:
 
@@ -38,27 +38,34 @@ Let's go through these quick steps to get started with LibRunner:
 
       ```rust
       use std::time::Duration;
-      use librunner::running::{Race, MetricRace, ImperialRace};
+      use librunner::running::Race;
+      use librunner::running::Running;
+      use librunner::running::MetricRace;
+      use librunner::running::ImperialRace;
+      use librunner::running::MetricRunning;
+      use librunner::running::ImperialRunning;
       use librunner::utils::converter;
       use librunner::utils::formatter;
 
       fn main() {
           let duration = converter::to_duration(4, 0, 0); // 04:00:00
-          let m_race: MetricRace = Race::new(42195, duration);
+          let m_marathon: MetricRace = Race::new(42195);
+          let m_running: MetricRunning = Running::new(duration);
 
           println!("The pace to run {}km in {}h is approximately {}/km at {:.2}km/h", 
-                   converter::to_km(m_race.distance),
-                   formatter::format_duration(m_race.duration()), 
-                   formatter::format_duration(m_race.average_pace()),
-                   converter::to_km_h(m_race.speed()));
+              converter::to_km(m_marathon.distance),
+              formatter::format_duration(m_running.duration()), 
+              formatter::format_duration(m_running.average_pace(&m_marathon)),
+              converter::to_km_h(m_running.speed(&m_marathon)));
 
-          let i_race: ImperialRace = Race::new(46112, duration);
+          let i_marathon: ImperialRace = Race::new(46112);
+          let i_running: ImperialRunning = Running::new(duration);
 
           println!("The pace to run {} miles in {}h is approximately {}/mile at {:.2}mph", 
-                   converter::to_mile(i_race.distance), 
-                   formatter::format_duration(i_race.duration()),
-                   formatter::format_duration(i_race.average_pace()),
-                   converter::to_mph(i_race.speed()));
+              converter::to_mile(i_marathon.distance), 
+              formatter::format_duration(i_running.duration()),
+              formatter::format_duration(i_running.average_pace(&i_marathon)),
+              converter::to_mph(i_running.speed(&i_marathon)));
       }
       ```
 5. then run the project again:
@@ -67,8 +74,8 @@ Let's go through these quick steps to get started with LibRunner:
 
    which generates the following output:
 
-       The pace to run 42.195km in 04:00:00h is approximately 05.41/km at 10.55km/h
-       The pace to run 26.2 miles in 04:00:00h is approximately 09.09/mile at 11.53mph
+       The pace to run 42.195km in 04:00:00h is approximately 05:41/km at 10.55km/h
+       The pace to run 26.2 miles in 04:00:00h is approximately 09:09/mile at 6.55mph
 
 ## License
 
