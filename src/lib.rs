@@ -1,196 +1,188 @@
-/// Utility functions to convert, format and do other things with values.
-pub mod utils {
-    /// Converts values between units and types.
-    pub mod converter {
-        use std::time::Duration;
+pub mod duration {
+    use std::time::Duration;
 
-        /// Creates a Duration based on the arguments hours, minutes, and seconds.
-        ///
-        /// Example:
-        ///
-        /// ```
-        /// use librunner::utils::converter;
-        ///
-        /// let duration = converter::to_duration(4, 5, 19); // 04:05:19
-        /// assert_eq!(duration.as_secs(), 14719);
-        /// ```
-        pub fn to_duration(hours: u64, minutes: u64, seconds: u64) -> Duration {
-            let mins = if hours > 0 { hours * 60 } else { 0 } + minutes;
-            let secs = if mins > 0 { mins * 60 } else { 0 } + seconds;
-            Duration::new(secs, 0)
+    /// Creates a Duration based on the arguments hours, minutes, and seconds.
+    ///
+    /// Example:
+    ///
+    /// ```
+    /// use librunner::duration;
+    ///
+    /// let d = duration::to_duration(4, 5, 19); // 04:05:19
+    /// assert_eq!(d.as_secs(), 14719);
+    /// ```
+    pub fn to_duration(hours: u64, minutes: u64, seconds: u64) -> Duration {
+        let mins = if hours > 0 { hours * 60 } else { 0 } + minutes;
+        let secs = if mins > 0 { mins * 60 } else { 0 } + seconds;
+        Duration::new(secs, 0)
+    }
+
+    /// Formats a duration to a human readable text.
+    ///
+    /// Example:
+    ///
+    /// ```
+    /// use librunner::duration;
+    ///
+    /// let d = duration::to_duration(4, 5, 19);
+    /// println!("Duration: {}", duration::format_duration(d));
+    /// ```
+    ///
+    /// It prints "Duration: 04:05:19".
+    pub fn format_duration(duration: Duration) -> String {
+        let mut secs = duration.as_secs();
+        let mut mins = 0;
+        let mut hors = 0;
+
+        if secs >= 60 {
+            mins = secs / 60;
+            secs = secs % 60;
+            hors = mins / 60;
+            mins = mins % 60;
         }
 
-        /// Converts metters per second (m/s) to kilometers per hour (km/h).
-        /// It is useful for converting raw values to readable ones.
-        /// 
-        /// Example:
-        /// 
-        /// ```
-        /// use librunner::utils::converter;
-        /// 
-        /// assert_eq!(converter::to_km_h(10.0), 36.0);
-        /// ```
-        pub fn to_km_h(m_s: f32) -> f32 {
-            m_s * 3.6
-        }
-
-        /// Converts yards per second (y/s) to miles per hour (mph).
-        /// It is useful for converting raw values to readable ones.
-        /// 
-        /// Example:
-        /// 
-        /// ```
-        /// use librunner::utils::converter;
-        /// 
-        /// assert_eq!(converter::to_mph(1.0), 2.04545);
-        /// assert_eq!(converter::to_mph(6.0), 12.272699);
-        /// ```
-        pub fn to_mph(y_s: f32) -> f32 {
-            y_s * 2.04545
-        }
-
-        /// Converts meters (m) to kilometers (km).
-        /// 
-        /// Example:
-        /// ```
-        /// use librunner::utils::converter;
-        /// 
-        /// assert_eq!(converter::to_km(1000), 1.0);
-        /// assert_eq!(converter::to_km(42195), 42.195);
-        /// ```
-        pub fn to_km(m: u64) -> f32 {
-            m as f32 / 1000.0
-        }
-
-        /// Converts miles to kilometers.
-        /// 
-        /// Example:
-        /// ```
-        /// use librunner::utils::converter;
-        /// 
-        /// assert_eq!(converter::mile_to_km(5.0), 8.0467);
-        /// assert_eq!(converter::mile_to_km(10.0), 16.0934);
-        /// ```
-        pub fn mile_to_km(mile: f32) -> f32 {
-            mile * 1.60934
-        }
-
-        /// Converts yards (y) to miles.
-        /// 
-        /// Example:
-        /// ```
-        /// use librunner::utils::converter;
-        /// 
-        /// assert_eq!(converter::to_mile(1760), 1.0);
-        /// assert_eq!(converter::to_mile(46112), 26.2);
-        /// ```
-        pub fn to_mile(y: u64) -> f32 {
-            y as f32 / 1760.0
-        }
-
-        /// Converts kilometers to miles.
-        /// 
-        /// Example:
-        /// ```
-        /// use librunner::utils::converter;
-        /// 
-        /// assert_eq!(converter::km_to_mile(16.0934), 10.0);
-        /// ```
-        pub fn km_to_mile(km: f32) -> f32 {
-            km / 1.60934
-        }
-
-        /// Converts meters to feet.
-        /// 
-        /// Example:
-        /// ```
-        /// use librunner::utils::converter;
-        /// 
-        /// assert_eq!(converter::meter_to_feet(100.0), 328.08398);
-        /// ```
-        pub fn meter_to_feet(m: f32) -> f32 {
-            m * 3.28084
-        }
-
-        /// Converts feet to meters.
-        /// 
-        /// Example:
-        /// ```
-        /// use librunner::utils::converter;
-        /// 
-        /// assert_eq!(converter::feet_to_meter(328.09), 100.00183);
-        /// ```
-        pub fn feet_to_meter(f: f32) -> f32 {
-            f / 3.28084
-        }
-
-        #[cfg(test)]
-        mod tests {
-            use crate::utils::converter;
-
-            #[test]
-            fn test_to_duration() {
-                let duration = converter::to_duration(4, 5, 19);
-                assert_eq!(duration.as_secs(), 14719);
-            }
-
-            #[test]
-            fn test_to_km_h() {
-                assert_eq!(converter::to_km_h(2.80), 10.08);
-                assert_eq!(converter::to_km_h(10.0), 36.0);
-            }
+        if hors == 0 {
+            format!("{:02}:{:02}", mins, secs)
+        } else {
+            format!("{:02}:{:02}:{:02}", hors, mins, secs)
         }
     }
 
-    /// Formats values to make them human-readable.
-    pub mod formatter {
-        use std::time::Duration;
+    #[cfg(test)]
+    mod tests {
+        use crate::duration;
 
-        /// Formats a duration to a human readable text.
-        ///
-        /// Example:
-        ///
-        /// ```
-        /// use librunner::utils::formatter;
-        /// use librunner::utils::converter;
-        ///
-        /// let duration = converter::to_duration(4, 5, 19);
-        /// println!("Duration: {}", formatter::format_duration(duration));
-        /// ```
-        ///
-        /// It prints "Duration: 04:05:19".
-        pub fn format_duration(duration: Duration) -> String {
-            let mut secs = duration.as_secs();
-            let mut mins = 0;
-            let mut hors = 0;
-
-            if secs >= 60 {
-                mins = secs / 60;
-                secs = secs % 60;
-                hors = mins / 60;
-                mins = mins % 60;
-            }
-
-            if hors == 0 {
-                format!("{:02}:{:02}", mins, secs)
-            } else {
-                format!("{:02}:{:02}:{:02}", hors, mins, secs)
-            }
+        #[test]
+        fn test_to_duration() {
+            let duration = duration::to_duration(4, 5, 19);
+            assert_eq!(duration.as_secs(), 14719);
         }
 
-        #[cfg(test)]
-        mod tests {
-            use crate::utils::converter;
-            use crate::utils::formatter;
+        #[test]
+        fn test_format_duration() {
+            assert_eq!(duration::format_duration(duration::to_duration(0, 0, 0)), "00:00");
+            assert_eq!(duration::format_duration(duration::to_duration(0, 0, 9)), "00:09");
+            assert_eq!(duration::format_duration(duration::to_duration(0, 5, 9)), "05:09");
+            assert_eq!(duration::format_duration(duration::to_duration(4, 5, 19)), "04:05:19");
+            assert_eq!(duration::format_duration(duration::to_duration(135, 59, 1)), "135:59:01");
+        }
+    }
+}
 
-            #[test]
-            fn test_format_duration() {
-                assert_eq!(formatter::format_duration(converter::to_duration(0, 0, 0)), "00:00");
-                assert_eq!(formatter::format_duration(converter::to_duration(0, 0, 9)), "00:09");
-                assert_eq!(formatter::format_duration(converter::to_duration(0, 5, 9)), "05:09");
-                assert_eq!(formatter::format_duration(converter::to_duration(4, 5, 19)), "04:05:19");
-                assert_eq!(formatter::format_duration(converter::to_duration(135, 59, 1)), "135:59:01");
-            }
+/// Functions to convert, format and do other things with distances.
+pub mod distance {
+    /// Converts metters per second (m/s) to kilometers per hour (km/h).
+    /// It is useful for converting raw values to readable ones.
+    /// 
+    /// Example:
+    /// 
+    /// ```
+    /// use librunner::distance;
+    /// 
+    /// assert_eq!(distance::to_km_h(10.0), 36.0);
+    /// ```
+    pub fn to_km_h(m_s: f32) -> f32 {
+        m_s * 3.6
+    }
+
+    /// Converts yards per second (y/s) to miles per hour (mph).
+    /// It is useful for converting raw values to readable ones.
+    /// 
+    /// Example:
+    /// 
+    /// ```
+    /// use librunner::distance;
+    /// 
+    /// assert_eq!(distance::to_mph(1.0), 2.04545);
+    /// assert_eq!(distance::to_mph(6.0), 12.272699);
+    /// ```
+    pub fn to_mph(y_s: f32) -> f32 {
+        y_s * 2.04545
+    }
+
+    /// Converts meters (m) to kilometers (km).
+    /// 
+    /// Example:
+    /// ```
+    /// use librunner::distance;
+    /// 
+    /// assert_eq!(distance::to_km(1000), 1.0);
+    /// assert_eq!(distance::to_km(42195), 42.195);
+    /// ```
+    pub fn to_km(m: u64) -> f32 {
+        m as f32 / 1000.0
+    }
+
+    /// Converts miles to kilometers.
+    /// 
+    /// Example:
+    /// ```
+    /// use librunner::distance;
+    /// 
+    /// assert_eq!(distance::mile_to_km(5.0), 8.0467);
+    /// assert_eq!(distance::mile_to_km(10.0), 16.0934);
+    /// ```
+    pub fn mile_to_km(mile: f32) -> f32 {
+        mile * 1.60934
+    }
+
+    /// Converts yards (y) to miles.
+    /// 
+    /// Example:
+    /// ```
+    /// use librunner::distance;
+    /// 
+    /// assert_eq!(distance::to_mile(1760), 1.0);
+    /// assert_eq!(distance::to_mile(46112), 26.2);
+    /// ```
+    pub fn to_mile(y: u64) -> f32 {
+        y as f32 / 1760.0
+    }
+
+    /// Converts kilometers to miles.
+    /// 
+    /// Example:
+    /// ```
+    /// use librunner::distance;
+    /// 
+    /// assert_eq!(distance::km_to_mile(16.0934), 10.0);
+    /// ```
+    pub fn km_to_mile(km: f32) -> f32 {
+        km / 1.60934
+    }
+
+    /// Converts meters to feet.
+    /// 
+    /// Example:
+    /// ```
+    /// use librunner::distance;
+    /// 
+    /// assert_eq!(distance::meter_to_feet(100.0), 328.08398);
+    /// ```
+    pub fn meter_to_feet(m: f32) -> f32 {
+        m * 3.28084
+    }
+
+    /// Converts feet to meters.
+    /// 
+    /// Example:
+    /// ```
+    /// use librunner::distance;
+    /// 
+    /// assert_eq!(distance::feet_to_meter(328.09), 100.00183);
+    /// ```
+    pub fn feet_to_meter(f: f32) -> f32 {
+        f / 3.28084
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use crate::distance;
+
+        #[test]
+        fn test_to_km_h() {
+            assert_eq!(distance::to_km_h(2.80), 10.08);
+            assert_eq!(distance::to_km_h(10.0), 36.0);
         }
     }
 }
@@ -228,14 +220,14 @@ pub mod running {
         /// use librunner::running::Running;
         /// use librunner::running::ImperialRace;
         /// use librunner::running::ImperialRunning;
-        /// use librunner::utils::converter;
+        /// use librunner::duration;
         /// 
         /// let mut splits: Vec<Duration> = Vec::new();
-        /// splits.push(converter::to_duration(0, 5, 53));
-        /// splits.push(converter::to_duration(0, 5, 38));
-        /// splits.push(converter::to_duration(0, 5, 44));
-        /// splits.push(converter::to_duration(0, 5, 37));
-        /// splits.push(converter::to_duration(0, 5, 29));
+        /// splits.push(duration::to_duration(0, 5, 53));
+        /// splits.push(duration::to_duration(0, 5, 38));
+        /// splits.push(duration::to_duration(0, 5, 44));
+        /// splits.push(duration::to_duration(0, 5, 37));
+        /// splits.push(duration::to_duration(0, 5, 29));
         ///
         /// let five_miles_race: ImperialRace = Race::new_from_splits(&splits);
         /// let five_miles_running: ImperialRunning = Running::new_from_splits(&splits);
@@ -429,14 +421,14 @@ pub mod running {
         /// use librunner::running::Running;
         /// use librunner::running::ImperialRace;
         /// use librunner::running::ImperialRunning;
-        /// use librunner::utils::converter;
+        /// use librunner::duration;
         /// 
         /// let mut splits: Vec<Duration> = Vec::new();
-        /// splits.push(converter::to_duration(0, 5, 53));
-        /// splits.push(converter::to_duration(0, 5, 38));
-        /// splits.push(converter::to_duration(0, 5, 44));
-        /// splits.push(converter::to_duration(0, 5, 37));
-        /// splits.push(converter::to_duration(0, 5, 29));
+        /// splits.push(duration::to_duration(0, 5, 53));
+        /// splits.push(duration::to_duration(0, 5, 38));
+        /// splits.push(duration::to_duration(0, 5, 44));
+        /// splits.push(duration::to_duration(0, 5, 37));
+        /// splits.push(duration::to_duration(0, 5, 29));
         ///
         /// let five_miles_race: ImperialRace = Race::new_from_splits(&splits);
         /// let five_miles_running: ImperialRunning = Running::new_from_splits(&splits);
@@ -716,7 +708,7 @@ mod tests {
     use crate::running::Running;
     use crate::running::ImperialRunning;
     use crate::running::MetricRunning;
-    use crate::utils::converter;
+    use crate::duration;
 
     #[test]
     fn test_new_imperial_race() {
@@ -736,11 +728,11 @@ mod tests {
     #[test]
     fn test_new_imperial_running_from_splits() {
         let mut splits: Vec<Duration> = Vec::new();
-        splits.push(converter::to_duration(0, 5, 53));
-        splits.push(converter::to_duration(0, 5, 38));
-        splits.push(converter::to_duration(0, 5, 44));
-        splits.push(converter::to_duration(0, 5, 37));
-        splits.push(converter::to_duration(0, 5, 29));
+        splits.push(duration::to_duration(0, 5, 53));
+        splits.push(duration::to_duration(0, 5, 38));
+        splits.push(duration::to_duration(0, 5, 44));
+        splits.push(duration::to_duration(0, 5, 37));
+        splits.push(duration::to_duration(0, 5, 29));
     
         let race: ImperialRace = Race::new_from_splits(&splits);
         let running: ImperialRunning = Running::new_from_splits(&splits);
@@ -802,11 +794,11 @@ mod tests {
     #[test]
     fn test_new_metric_from_splits() {
         let mut splits: Vec<Duration> = Vec::new();
-        splits.push(converter::to_duration(0, 5, 53));
-        splits.push(converter::to_duration(0, 5, 38));
-        splits.push(converter::to_duration(0, 5, 44));
-        splits.push(converter::to_duration(0, 5, 37));
-        splits.push(converter::to_duration(0, 5, 29));
+        splits.push(duration::to_duration(0, 5, 53));
+        splits.push(duration::to_duration(0, 5, 38));
+        splits.push(duration::to_duration(0, 5, 44));
+        splits.push(duration::to_duration(0, 5, 37));
+        splits.push(duration::to_duration(0, 5, 29));
     
         let five_miles_race: MetricRace = Race::new_from_splits(&splits);
         let five_miles_running: MetricRunning = Running::new_from_splits(&splits);
