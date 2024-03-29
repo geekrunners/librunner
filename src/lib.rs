@@ -1,3 +1,4 @@
+/// Functions to convert, format and do other things with duration.
 pub mod duration {
     use std::time::Duration;
 
