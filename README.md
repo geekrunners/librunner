@@ -1,12 +1,12 @@
-# Lib Runner
+# librunner
 
 Rust package to assist runners in planning workouts, completing races, and improving health.
 
 ## Usage
 
-Let's go through these quick steps to get started with LibRunner:
+Let's go through these quick steps to get started with **librunner**:
 
-1. visit https://rustup.rs and install rustup, an installer for the programming language Rust. Once installed, update and check the toolchain:
+1. visit https://rustup.rs and install **rustup**, an installer for the programming language Rust. Once installed, update and check the toolchain:
 
        $ rustup update
        $ rustc --version
@@ -31,7 +31,7 @@ Let's go through these quick steps to get started with LibRunner:
 
       ```toml
       [dependencies]
-      librunner = "0.6.0"
+      librunner = "0.7.0"
       ```
 
    4.2. replace the content of the file `src/main.rs` with the code below:
@@ -44,28 +44,28 @@ Let's go through these quick steps to get started with LibRunner:
       use librunner::running::ImperialRace;
       use librunner::running::MetricRunning;
       use librunner::running::ImperialRunning;
-      use librunner::utils::converter;
-      use librunner::utils::formatter;
+      use librunner::distance;
+      use librunner::duration;
 
       fn main() {
-          let duration = converter::to_duration(4, 0, 0); // 04:00:00
+          let d = duration::to_duration(4, 0, 0); // 04:00:00
           let m_marathon: MetricRace = Race::new(42195);
-          let m_running: MetricRunning = Running::new(duration);
+          let m_running: MetricRunning = Running::new(d);
 
           println!("The pace to run {}km in {}h is approximately {}/km at {:.2}km/h", 
-              converter::to_km(m_marathon.distance),
-              formatter::format_duration(m_running.duration()), 
-              formatter::format_duration(m_running.average_pace(&m_marathon)),
-              converter::to_km_h(m_running.speed(&m_marathon)));
+              distance::to_km(m_marathon.distance),
+              duration::format_duration(m_running.duration()), 
+              duration::format_duration(m_running.average_pace(&m_marathon)),
+              distance::to_km_h(m_running.speed(&m_marathon)));
 
           let i_marathon: ImperialRace = Race::new(46112);
-          let i_running: ImperialRunning = Running::new(duration);
+          let i_running: ImperialRunning = Running::new(d);
 
           println!("The pace to run {} miles in {}h is approximately {}/mile at {:.2}mph", 
-              converter::to_mile(i_marathon.distance), 
-              formatter::format_duration(i_running.duration()),
-              formatter::format_duration(i_running.average_pace(&i_marathon)),
-              converter::to_mph(i_running.speed(&i_marathon)));
+              distance::to_mile(i_marathon.distance), 
+              duration::format_duration(i_running.duration()),
+              duration::format_duration(i_running.average_pace(&i_marathon)),
+              distance::to_mph(i_running.speed(&i_marathon)));
       }
       ```
 5. then run the project again:
@@ -79,4 +79,4 @@ Let's go through these quick steps to get started with LibRunner:
 
 ## License
 
-LibRunner is used under the terms of the [Apache License version 2.0](https://github.com/geekrunners/librunner/blob/main/LICENSE).
+**librunner** is used under the terms of the [Apache License version 2.0](https://github.com/geekrunners/librunner/blob/main/LICENSE).
