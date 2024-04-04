@@ -37,3 +37,5 @@ This document is a guide to learn how to contribute to LibRunner. You can contri
 4. Finally, publish the library:
 
        $ cargo publish
+
+Visit https://crates.io/crates/librunner to confirm that the new version was published.
